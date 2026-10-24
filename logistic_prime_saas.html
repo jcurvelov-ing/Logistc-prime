@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-slate-900">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logistic Prime - SaaS de Gestión Logística</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+  </style>
+</head>
+<body class="h-full text-slate-100 bg-slate-900 font-sans antialiased overflow-x-hidden">
+
+  <div class="min-h-full flex flex-col md:flex-row">
+    
+    <!-- SIDEBAR -->
+    <aside class="w-full md:w-64 bg-slate-950 border-r border-slate-800 flex-shrink-0 flex flex-col justify-between">
+      <div>
+        <!-- Brand Header -->
+        <div class="p-6 flex items-center space-x-3 border-b border-slate-800">
+          <div class="p-2 bg-indigo-600 rounded-xl shadow-lg shadow-indigo-500/30">
+            <i data-lucide="truck" class="w-6 h-6 text-white"></i>
+          </div>
+          <div>
+            <h1 class="text-lg font-bold tracking-wider text-white">LOGISTIC<span class="text-indigo-400">PRIME</span></h1>
+            <p class="text-xs text-slate-400">Enterprise SaaS v2.4</p>
+          </div>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav class="p-4 space-y-1">
+          <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-all bg-indigo-600 text-white shadow-lg shadow-indigo-600/20">
+            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+            <span>Dashboard Global</span>
+          </button>
+          <button onclick="switchTab('tramites')" id="nav-tramites" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800/60 hover:text-white transition-all">
+            <i data-lucide="file-text" class="w-5 h-5"></i>
+            <span>Gestión de Trámites</span>
+          </button>
+          <button onclick="switchTab('bodegas')" id="nav-bodegas" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800/60 hover:text-white transition-all">
+            <i data-lucide="warehouse" class="w-5 h-5"></i>
+            <span>Bodegas e Inventario</span>
+          </button>
+          <button onclick="switchTab('cotizador')" id="nav-cotizador" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800/60 hover:text-white transition-all">
+            <i data-lucide="calculator" class="w-5 h-5"></i>
+            <span>Calculadora Despachos</span>
+          </button>
+          <button onclick="switchTab('reportes')" id="nav-reportes" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800/60 hover:text-white transition-all">
+            <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+            <span>Reportes y KPIs</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Academic Project Footer -->
+      <div class="p-4 border-t border-slate-800 bg-slate-950/50">
+        <div class="p-3 bg-slate-900 border border-slate-800 rounded-lg">
+          <div class="flex items-center space-x-2 text-xs font-semibold text-indigo-400 mb-1">
+            <i data-lucide="graduation-cap" class="w-4 h-4"></i>
+            <span>PROYECTO ACADÉMICO</span>
+          </div>
+          <p class="text-xs text-slate-400">Ingeniería de Software</p>
+          <p class="text-[10px] text-slate-500 mt-1">Caso de Estudio: Logistic Prime</p>
+          <button onclick="toggleModal('ficha-modal')" class="mt-3 w-full text-center text-xs py-1.5 px-3 bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 rounded hover:bg-indigo-600/40 transition">
+            Ver Ficha Técnica IEEE
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 flex flex-col min-w-0 bg-slate-900 overflow-y-auto">
+      
+      <!-- HEADER -->
+      <header class="bg-slate-950/80 backdrop-blur border-b border-slate-800 sticky top-0 z-10 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <h2 id="page-title" class="text-xl font-bold text-white">Dashboard Operativo - Logistic Prime</h2>
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span> Sistema Activo
+          </span>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <button onclick="toggleModal('ficha-modal')" class="hidden sm:flex items-center space-x-2 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-3 py-2 rounded-lg transition">
+            <i data-lucide="book-open" class="w-4 h-4 text-indigo-400"></i>
+            <span>Documentación Requerimientos</span>
+          </button>
+          <div class="flex items-center space-x-3 border-l border-slate-800 pl-4">
+            <div class="w-9 h-9 rounded-full bg-indigo-600/30 border border-indigo-500/40 flex items-center justify-center font-bold text-indigo-300 text-sm">
+              LP
+            </div>
+            <div class="hidden md:block text-left">
+              <p class="text-xs font-semibold text-white">Ingeniería SW</p>
+              <p class="text-[10px] text-slate-400">Admin - Logistic Prime</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- TAB CONTENTS CONTAINER -->
+      <div class="p-6 space-y-6">
+
+        <!-- SECTION: DASHBOARD -->
+        <section id="tab-dashboard" class="tab-content space-y-6">
+          <!-- Metrics Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-5 relative overflow-hidden">
+              <div class="flex justify-between items-start">
+                <div>
+                  <p class="text-xs text-slate-400 font-medium">Trámites Activos</p>
+                  <h3 class="text-2xl font-bold text-white mt-1" id="kpi-tramites-count">128</h3>
+                </div>
+                <div class="p-2 bg-indigo-500/10 rounded-lg border border-indigo-500/20 text-indigo-400">
+                  <i data-lucide="file-check-2" class="w-5 h-5"></i>
+                </div>
+              </div>
+              <p class="text-xs text-emerald-400 flex items-center mt-3">
+                <i data-lucide="trending-up" class="w-3.5 h-3.5 mr-1"></i> +12% respecto a la semana anterior
+              </p>
+            </div>
+
+            <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-5 relative overflow-hidden">
+              <div class="flex justify-between items-start">
+                <div>
+                  <p class="text-xs text-slate-400 font-medium">Capacidad Ocupada</p>
+                  <h3 class="text-2xl font-bold text-white mt-1">78.4%</h3>
+                </div>
+                <div class="p-2 bg-amber-500/10 rounded-lg border border-amber-500/20 text-amber-400">
+                  <i data-lucide="boxes" class="w-5 h-5"></i>
+                </div>
+              </div>
+              <p class="text-xs text-amber-400 flex items-center mt-3">
+                <i data-lucide="alert-circle" class="w-3.5 h-3.5 mr-1"></i> Bodega Principal al 85%
+              </p>
+            </div>
+
+            <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-5 relative overflow-hidden">
+              <div class="flex justify-between items-start">
+                <div>
+                  <p class="text-xs text-slate-400 font-medium">Despachos este Mes</p>
+                  <h3 class="text-2xl font-bold text-white mt-1">1,420</h3>
+                </div>
+                <div class="p-2 bg-emerald-500/10 rounded-lg border border-emerald-500/20 text-emerald-400">
+                  <i data-lucide="send" class="w-5 h-5"></i>
+                </div>
+              </div>
+              <p class="text-xs text-emerald-400 flex items-center mt-3">
+                <i data-lucide="check-circle" class="w-3.5 h-3.5 mr-1"></i> 99.1% entregas a tiempo
+              </p>
+            </div>
+
+            <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-5 relative overflow-hidden">
+              <div class="flex justify-between items-start">
+                <div>
+                  <p class="text-xs text-slate-400 font-medium">Ingresos Estimados</p>
+                  <h3 class="text-2xl font-bold text-white mt-1">$184,200 USD</h3>
+                </div>
+                <div class="p-2 bg-blue-500/10 rounded-lg border border-blue-500/20 text-blue-400">
+                  <i data-lucide="dollar-sign" class="w-5 h-5"></i>
+                </div>
+              </div>
+              <p class="text-xs text-slate-400 flex items-center mt-3">
+                <i data-lucide="clock" class="w-3.5 h-3.5 mr-1"></i> Actualizado hace 5 mins
+              </p>
+            </div>
+          </div>
+
+          <!-- Charts Row -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-sm font-semibold text-white flex items-center">
+                  <i data-lucide="trending-up" class="w-4 h-4 mr-2 text-indigo-400"></i>
+                  Volumen de Trámites por Mes (Logistic Prime)
+                </h3>
+              </div>
+              <div class="h-64">
+                <canvas id="chart-tramites"></canvas>
+              </div>
+            </div>
+
+            <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-sm font-semibold text-white flex items-center">
+                  <i data-lucide="pie-chart" class="w-4 h-4 mr-2 text-indigo-400"></i>
+                  Distribución de Carga por Tipo de Trámite
+                </h3>
+              </div>
+              <div class="h-64 flex justify-center">
+                <canvas id="chart-tipos"></canvas>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION: TRAMITES -->
+        <section id="tab-tramites" class="tab-content space-y-6 hidden">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-800/40 p-4 border border-slate-700/60 rounded-xl">
+            <div>
+              <h3 class="text-lg font-bold text-white">Control de Trámites Logísticos</h3>
+              <p class="text-xs text-slate-400">Gestión de aduanas, permisos e importación/exportación</p>
+            </div>
+            <button onclick="toggleModal('modal-nuevo-tramite')" class="flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-sm px-4 py-2 rounded-lg transition shadow-lg shadow-indigo-600/30">
+              <i data-lucide="plus" class="w-4 h-4"></i>
+              <span>Nuevo Trámite</span>
+            </button>
+          </div>
+
+          <!-- Table Filter & Search -->
+          <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl overflow-hidden">
+            <div class="p-4 border-b border-slate-700/60 flex flex-col sm:flex-row gap-3 justify-between">
+              <div class="relative flex-1 max-w-md">
+                <i data-lucide="search" class="w-4 h-4 absolute left-3 top-3 text-slate-400"></i>
+                <input type="text" id="search-tramites" onkeyup="filterTramites()" placeholder="Buscar por código, cliente o trámite..." class="w-full bg-slate-900 border border-slate-700 rounded-lg pl-9 pr-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+              </div>
+              <div class="flex items-center space-x-2">
+                <label class="text-xs text-slate-400">Estado:</label>
+                <select id="filter-estado" onchange="filterTramites()" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                  <option value="todos">Todos</option>
+                  <option value="Aprobado">Aprobado</option>
+                  <option value="En Revisión">En Revisión</option>
+                  <option value="Pendiente">Pendiente</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Table -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm text-slate-300">
+                <thead class="bg-slate-900/60 text-xs uppercase text-slate-400 border-b border-slate-700/60">
+                  <tr>
+                    <th class="px-6 py-3">Código</th>
+                    <th class="px-6 py-3">Cliente</th>
+                    <th class="px-6 py-3">Tipo de Trámite</th>
+                    <th class="px-6 py-3">Origen / Destino</th>
+                    <th class="px-6 py-3">Estado</th>
+                    <th class="px-6 py-3 text-right">Acción</th>
+                  </tr>
+                </thead>
+                <tbody id="tramites-table-body" class="divide-y divide-slate-700/40">
+                  <!-- JS Injected Rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION: BODEGAS E INVENTARIO -->
+        <section id="tab-bodegas" class="tab-content space-y-6 hidden">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Bodega 1 -->
+            <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 space-y-4">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h4 class="font-bold text-white">Bodega Central LP-01</h4>
+                  <p class="text-xs text-slate-400">Zona Franca - Puerto Principal</p>
+                </div>
+                <span class="px-2 py-1 text-[10px] font-bold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Operativa</span>
+              </div>
+              <div class="space-y-2">
+                <div class="flex justify-between text-xs text-slate-300">
+                  <span>Capacidad Utilizada</span>
+                  <span class="font-bold">85%</span>
+                </div>
+                <div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
+                  <div class="bg-amber-500 h-full" style="width: 85%"></div>
+                </div>
+              </div>
+              <ul class="text-xs text-slate-400 space-y-1.5 pt-2 border-t border-slate-700/40">
+                <li>• Capacidad Máxima: 12,000 M3</li>
+                <li>• Carga Consolidada: 10,200 M3</li>
+                <li>• Contenedores Activos: 42 TEU</li>
+              </ul>
+            </div>
+
+            <!-- Bodega 2 -->
+            <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 space-y-4">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h4 class="font-bold text-white">Bodega Norte LP-02</h4>
+                  <p class="text-xs text-slate-400">Hub Aeropuerto Internacional</p>
+                </div>
+                <span class="px-2 py-1 text-[10px] font-bold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Operativa</span>
+              </div>
+              <div class="space-y-2">
+                <div class="flex justify-between text-xs text-slate-300">
+                  <span>Capacidad Utilizada</span>
+                  <span class="font-bold">62%</span>
+                </div>
+                <div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
+                  <div class="bg-indigo-500 h-full" style="width: 62%"></div>
+                </div>
+              </div>
+              <ul class="text-xs text-slate-400 space-y-1.5 pt-2 border-t border-slate-700/40">
+                <li>• Capacidad Máxima: 8,500 M3</li>
+                <li>• Carga Refrigerada: 5,270 M3</li>
+                <li>• Posiciones Racks: 1,200</li>
+              </ul>
+            </div>
+
+            <!-- Bodega 3 -->
+            <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 space-y-4">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h4 class="font-bold text-white">Bodega Sur LP-03</h4>
+                  <p class="text-xs text-slate-400">Parque Industrial Sur</p>
+                </div>
+                <span class="px-2 py-1 text-[10px] font-bold rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">Mantenimiento</span>
+              </div>
+              <div class="space-y-2">
+                <div class="flex justify-between text-xs text-slate-300">
+                  <span>Capacidad Utilizada</span>
+                  <span class="font-bold">34%</span>
+                </div>
+                <div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
+                  <div class="bg-emerald-500 h-full" style="width: 34%"></div>
+                </div>
+              </div>
+              <ul class="text-xs text-slate-400 space-y-1.5 pt-2 border-t border-slate-700/40">
+                <li>• Capacidad Máxima: 6,000 M3</li>
+                <li>• Carga General: 2,040 M3</li>
+                <li>• Bahías de Carga: 8 disponibles</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION: CALCULADORA DE DESPACHOS -->
+        <section id="tab-cotizador" class="tab-content space-y-6 hidden">
+          <div class="max-w-2xl mx-auto bg-slate-800/40 border border-slate-700/60 rounded-xl p-6">
+            <h3 class="text-lg font-bold text-white mb-1">Calculadora de Tarifas - Logistic Prime</h3>
+            <p class="text-xs text-slate-400 mb-6">Herramienta de estimación automatizada de costos de flete internacional y nacional.</p>
+
+            <form id="calc-form" onsubmit="calcularCosto(event)" class="space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs text-slate-300 font-medium mb-1">Tipo de Transporte</label>
+                  <select id="calc-tipo" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                    <option value="maritimo">Marítimo (FCL/LCL)</option>
+                    <option value="aereo">Aéreo Express</option>
+                    <option value="terrestre">Terrestre Carga Pesada</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs text-slate-300 font-medium mb-1">Peso Estimado (Kg)</label>
+                  <input type="number" id="calc-peso" required min="1" placeholder="Ej: 500" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs text-slate-300 font-medium mb-1">Volumen (M³)</label>
+                  <input type="number" step="0.1" id="calc-volumen" required min="0.1" placeholder="Ej: 2.5" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                </div>
+                <div>
+                  <label class="block text-xs text-slate-300 font-medium mb-1">Seguro de Carga</label>
+                  <select id="calc-seguro" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                    <option value="0.02">Básico (2%)</option>
+                    <option value="0.05">Full Cover Logistic Prime (5%)</option>
+                    <option value="0">Sin Seguro</option>
+                  </select>
+                </div>
+              </div>
+
+              <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-lg transition shadow-lg shadow-indigo-600/30">
+                Calcular Costo Estimado
+              </button>
+            </form>
+
+            <div id="calc-result" class="mt-6 p-4 bg-indigo-950/40 border border-indigo-500/30 rounded-lg hidden">
+              <p class="text-xs text-indigo-300 uppercase tracking-wider font-semibold">Estimación de Costo Final</p>
+              <h4 class="text-2xl font-bold text-white mt-1" id="calc-total">$0.00 USD</h4>
+              <p class="text-xs text-slate-400 mt-2" id="calc-breakdown">Incluye tarifa base, volumen y seguro contratado.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION: REPORTES -->
+        <section id="tab-reportes" class="tab-content space-y-6 hidden">
+          <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-6">
+            <h3 class="text-lg font-bold text-white mb-2">Generador de Reportes Universitarios</h3>
+            <p class="text-xs text-slate-400 mb-4">Exporta la información operativa de Logistic Prime para entregables académicos.</p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <button onclick="descargarSimulacion('KPIs Operativos')" class="p-4 bg-slate-900 border border-slate-700 rounded-lg text-left hover:border-indigo-500 transition">
+                <i data-lucide="file-spread-sheet" class="w-6 h-6 text-indigo-400 mb-2"></i>
+                <h4 class="font-bold text-sm text-white">Reporte de KPIs</h4>
+                <p class="text-xs text-slate-400">Eficiencia de despachos y trámites</p>
+              </button>
+              <button onclick="descargarSimulacion('Inventario Bodegas')" class="p-4 bg-slate-900 border border-slate-700 rounded-lg text-left hover:border-indigo-500 transition">
+                <i data-lucide="boxes" class="w-6 h-6 text-emerald-400 mb-2"></i>
+                <h4 class="font-bold text-sm text-white">Capacidad de Bodegas</h4>
+                <p class="text-xs text-slate-400">Ocupación y disponibilidad M3</p>
+              </button>
+              <button onclick="descargarSimulacion('Especificacion IEEE 830')" class="p-4 bg-slate-900 border border-slate-700 rounded-lg text-left hover:border-indigo-500 transition">
+                <i data-lucide="code" class="w-6 h-6 text-amber-400 mb-2"></i>
+                <h4 class="font-bold text-sm text-white">Documentación SW</h4>
+                <p class="text-xs text-slate-400">Requerimientos RF / RNF</p>
+              </button>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL: NUEVO TRÁMITE -->
+  <div id="modal-nuevo-tramite" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h3 class="text-md font-bold text-white">Registrar Nuevo Trámite</h3>
+        <button onclick="toggleModal('modal-nuevo-tramite')" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="guardarTramite(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs text-slate-300 font-medium mb-1">Cliente</label>
+          <input type="text" id="nuevo-cliente" required placeholder="Nombre de la empresa" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200">
+        </div>
+        <div>
+          <label class="block text-xs text-slate-300 font-medium mb-1">Tipo de Trámite</label>
+          <select id="nuevo-tipo" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200">
+            <option value="Importación Marítima">Importación Marítima</option>
+            <option value="Exportación Aérea">Exportación Aérea</option>
+            <option value="Despacho Aduanero">Despacho Aduanero</option>
+            <option value="Tránsito Terrestre">Tránsito Terrestre</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs text-slate-300 font-medium mb-1">Origen / Destino</label>
+          <input type="text" id="nuevo-origen" required placeholder="Ej: Shanghái -> Valparaíso" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200">
+        </div>
+        <div>
+          <label class="block text-xs text-slate-300 font-medium mb-1">Estado Inicial</label>
+          <select id="nuevo-estado" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200">
+            <option value="Pendiente">Pendiente</option>
+            <option value="En Revisión">En Revisión</option>
+            <option value="Aprobado">Aprobado</option>
+          </select>
+        </div>
+        <div class="pt-3 flex justify-end space-x-2">
+          <button type="button" onclick="toggleModal('modal-nuevo-tramite')" class="px-4 py-2 bg-slate-800 text-slate-300 text-xs font-medium rounded-lg hover:bg-slate-700">Cancelar</button>
+          <button type="submit" class="px-4 py-2 bg-indigo-600 text-white text-xs font-medium rounded-lg hover:bg-indigo-500 shadow-md shadow-indigo-600/30">Guardar Registros</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: FICHA TÉCNICA SW (DOCUMENTACIÓN INGENIERÍA) -->
+  <div id="ficha-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-xl max-w-3xl w-full max-h-[85vh] flex flex-col shadow-2xl">
+      <div class="p-4 border-b border-slate-800 flex justify-between items-center">
+        <div>
+          <h3 class="font-bold text-white text-base">Ficha Técnica de Ingeniería de Software</h3>
+          <p class="text-xs text-indigo-400">Proyecto: Sistema SaaS Logistic Prime (IEEE 830 Standard)</p>
+        </div>
+        <button onclick="toggleModal('ficha-modal')" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-6 text-sm text-slate-300">
+        <div>
+          <h4 class="font-bold text-indigo-400 uppercase text-xs tracking-wider mb-2">1. Objetivos del Sistema</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Diseñar e implementar una plataforma centralizada tipo SaaS para la empresa <strong>Logistic Prime</strong>, orientada a la optimización de trámites aduaneros, monitoreo de capacidad en bodegas y estimación automática de costos operativos.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-indigo-400 uppercase text-xs tracking-wider mb-2">2. Requerimientos Funcionales (RF)</h4>
+          <ul class="list-disc list-inside text-xs space-y-1 text-slate-300">
+            <li><strong>RF-01:</strong> Gestión en tiempo real del estado de trámites de aduana e importaciones/exportaciones.</li>
+            <li><strong>RF-02:</strong> Visualización de métricas de ocupación y volumen en M3 de las bodegas operativas.</li>
+            <li><strong>RF-03:</strong> Módulo de cálculo automático de tarifas según modalidad (aéreo, marítimo, terrestre), peso y volumen.</li>
+            <li><strong>RF-04:</strong> Módulo de generación e impresión de reportes executivos en formato estándar.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-indigo-400 uppercase text-xs tracking-wider mb-2">3. Requerimientos No Funcionales (RNF)</h4>
+          <ul class="list-disc list-inside text-xs space-y-1 text-slate-300">
+            <li><strong>RNF-01 (Usabilidad):</strong> Interfaz adaptable con Dark Mode bajo principios UX/UI modernos para personal operativo.</li>
+            <li><strong>RNF-02 (Rendimiento):</strong> Carga inicial y actualización dinámica de elementos en un tiempo inferior a 1.5 segundos.</li>
+            <li><strong>RNF-03 (Arquitectura):</strong> Front-end desacoplado listo para integrar APIs RESTful en futuras fases del proyecto.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="p-4 border-t border-slate-800 bg-slate-950/50 flex justify-end">
+        <button onclick="toggleModal('ficha-modal')" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium rounded-lg">Cerrar Documentación</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // INITIAL STATE & MOCK DATA FOR LOGISTIC PRIME
+    let tramitesData = [
+      { id: 'LP-8921', cliente: 'AeroTech Corp', tipo: 'Importación Marítima', origen: 'Shanghái -> Valparaíso', estado: 'Aprobado' },
+      { id: 'LP-8922', cliente: 'Global Food Import', tipo: 'Despacho Aduanero', origen: 'Lima -> Bogotá', estado: 'En Revisión' },
+      { id: 'LP-8923', cliente: 'Industrias San José', tipo: 'Exportación Aérea', origen: 'Santiago -> Miami', estado: 'Pendiente' },
+      { id: 'LP-8924', cliente: 'TechLogistics SA', tipo: 'Tránsito Terrestre', origen: 'Buenos Aires -> Santiago', estado: 'Aprobado' }
+    ];
+
+    // INITIALIZATION
+    window.onload = function() {
+      lucide.createIcons();
+      renderTramitesTable();
+      initCharts();
+    };
+
+    // TAB SWITCHING SYSTEM
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/20');
+        btn.classList.add('text-slate-400');
+      });
+
+      document.getElementById('tab-' + tabId).classList.remove('hidden');
+      const activeNav = document.getElementById('nav-' + tabId);
+      activeNav.classList.add('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/20');
+      activeNav.classList.remove('text-slate-400');
+
+      // Update Header Title
+      const titles = {
+        'dashboard': 'Dashboard Operativo - Logistic Prime',
+        'tramites': 'Gestión de Trámites Logísticos',
+        'bodegas': 'Control de Bodegas e Inventario',
+        'cotizador': 'Calculadora de Envíos y Tarifas',
+        'reportes': 'Reportes Universitarios y Analytics'
+      };
+      document.getElementById('page-title').innerText = titles[tabId];
+    }
+
+    // MODAL TOGGLE
+    function toggleModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.classList.toggle('hidden');
+    }
+
+    // RENDER TABLE
+    function renderTramitesTable() {
+      const tbody = document.getElementById('tramites-table-body');
+      tbody.innerHTML = '';
+
+      tramitesData.forEach(item => {
+        let badgeColor = 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+        if (item.estado === 'Aprobado') badgeColor = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+        if (item.estado === 'En Revisión') badgeColor = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+
+        tbody.innerHTML += `
+          <tr class="hover:bg-slate-800/30 transition">
+            <td class="px-6 py-4 font-mono font-bold text-indigo-400">${item.id}</td>
+            <td class="px-6 py-4 text-white font-medium">${item.cliente}</td>
+            <td class="px-6 py-4">${item.tipo}</td>
+            <td class="px-6 py-4 text-xs text-slate-400">${item.origen}</td>
+            <td class="px-6 py-4">
+              <span class="px-2.5 py-1 rounded-full text-xs border ${badgeColor}">${item.estado}</span>
+            </td>
+            <td class="px-6 py-4 text-right">
+              <button onclick="eliminarTramite('${item.id}')" class="text-slate-400 hover:text-red-400 transition">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+      lucide.createIcons();
+      document.getElementById('kpi-tramites-count').innerText = tramitesData.length;
+    }
+
+    // FILTER TABLE
+    function filterTramites() {
+      const search = document.getElementById('search-tramites').value.toLowerCase();
+      const estado = document.getElementById('filter-estado').value;
+
+      const filtered = tramitesData.filter(t => {
+        const matchesSearch = t.cliente.toLowerCase().includes(search) || t.id.toLowerCase().includes(search) || t.tipo.toLowerCase().includes(search);
+        const matchesEstado = estado === 'todos' || t.estado === estado;
+        return matchesSearch && matchesEstado;
+      });
+
+      const tbody = document.getElementById('tramites-table-body');
+      tbody.innerHTML = '';
+      filtered.forEach(item => {
+        let badgeColor = 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+        if (item.estado === 'Aprobado') badgeColor = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+        if (item.estado === 'En Revisión') badgeColor = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+
+        tbody.innerHTML += `
+          <tr class="hover:bg-slate-800/30 transition">
+            <td class="px-6 py-4 font-mono font-bold text-indigo-400">${item.id}</td>
+            <td class="px-6 py-4 text-white font-medium">${item.cliente}</td>
+            <td class="px-6 py-4">${item.tipo}</td>
+            <td class="px-6 py-4 text-xs text-slate-400">${item.origen}</td>
+            <td class="px-6 py-4">
+              <span class="px-2.5 py-1 rounded-full text-xs border ${badgeColor}">${item.estado}</span>
+            </td>
+            <td class="px-6 py-4 text-right">
+              <button onclick="eliminarTramite('${item.id}')" class="text-slate-400 hover:text-red-400 transition">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+      lucide.createIcons();
+    }
+
+    // ADD NEW TRAMITE
+    function guardarTramite(e) {
+      e.preventDefault();
+      const newId = 'LP-' + Math.floor(1000 + Math.random() * 9000);
+      const cliente = document.getElementById('nuevo-cliente').value;
+      const tipo = document.getElementById('nuevo-tipo').value;
+      const origen = document.getElementById('nuevo-origen').value;
+      const estado = document.getElementById('nuevo-estado').value;
+
+      tramitesData.unshift({ id: newId, cliente, tipo, origen, estado });
+      renderTramitesTable();
+      toggleModal('modal-nuevo-tramite');
+      e.target.reset();
+    }
+
+    // DELETE TRAMITE
+    function eliminarTramite(id) {
+      tramitesData = tramitesData.filter(t => t.id !== id);
+      renderTramitesTable();
+    }
+
+    // CALCULATOR LOGIC
+    function calcularCosto(e) {
+      e.preventDefault();
+      const tipo = document.getElementById('calc-tipo').value;
+      const peso = parseFloat(document.getElementById('calc-peso').value);
+      const volumen = parseFloat(document.getElementById('calc-volumen').value);
+      const seguroRate = parseFloat(document.getElementById('calc-seguro').value);
+
+      let baseRate = 50;
+      if (tipo === 'aereo') baseRate = 120;
+      if (tipo === 'maritimo') baseRate = 30;
+
+      const subtotal = baseRate + (peso * 1.5) + (volumen * 25);
+      const seguro = subtotal * seguroRate;
+      const total = subtotal + seguro;
+
+      document.getElementById('calc-total').innerText = '$' + total.toFixed(2) + ' USD';
+      document.getElementById('calc-breakdown').innerText = `Base: $${subtotal.toFixed(2)} USD | Seguro/Cargos: $${seguro.toFixed(2)} USD`;
+      document.getElementById('calc-result').classList.remove('hidden');
+    }
+
+    // MOCK DOWNLOAD REPORT
+    function descargarSimulacion(nombre) {
+      alert('Simulación de descarga: Reporte de "' + nombre + '" generado para Logistic Prime.');
+    }
+
+    // CHARTS CONFIGURATION
+    function initCharts() {
+      // Line Chart
+      const ctx1 = document.getElementById('chart-tramites').getContext('2d');
+      new Chart(ctx1, {
+        type: 'line',
+        data: {
+          labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+          datasets: [{
+            label: 'Trámites Completados',
+            data: [65, 78, 90, 115, 105, 128],
+            borderColor: '#6366f1',
+            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+            fill: true,
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } },
+            y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } }
+          }
+        }
+      });
+
+      // Pie Chart
+      const ctx2 = document.getElementById('chart-tipos').getContext('2d');
+      new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+          labels: ['Marítimo', 'Aéreo', 'Aduanas', 'Terrestre'],
+          datasets: [{
+            data: [40, 25, 20, 15],
+            backgroundColor: ['#4f46e5', '#3b82f6', '#10b981', '#f59e0b']
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: { color: '#94a3b8', font: { size: 11 } }
+            }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>

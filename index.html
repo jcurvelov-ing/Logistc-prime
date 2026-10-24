@@ -192,7 +192,7 @@
               <div class="flex justify-between items-start">
                 <div>
                   <p class="text-xs text-slate-400 font-medium">Ingresos Estimados</p>
-                  <h3 class="text-2xl font-bold text-white mt-1">$184,200 USD</h3>
+                  <h3 class="text-2xl font-bold text-white mt-1">$184.200 COP</h3>
                 </div>
                 <div class="p-2 bg-blue-500/10 rounded-lg border border-blue-500/20 text-blue-400">
                   <i data-lucide="dollar-sign" class="w-5 h-5"></i>
@@ -408,7 +408,7 @@
 
             <div id="calc-result" class="mt-6 p-4 bg-indigo-950/40 border border-indigo-500/30 rounded-lg hidden">
               <p class="text-xs text-indigo-300 uppercase tracking-wider font-semibold">Estimación de Costo Final</p>
-              <h4 class="text-2xl font-bold text-white mt-1" id="calc-total">$0.00 USD</h4>
+              <h4 class="text-2xl font-bold text-white mt-1" id="calc-total">$0.00 COP</h4>
               <p class="text-xs text-slate-400 mt-2" id="calc-breakdown">Incluye tarifa base, volumen y seguro contratado.</p>
             </div>
           </div>
@@ -686,8 +686,8 @@
       const seguro = subtotal * seguroRate;
       const total = subtotal + seguro;
 
-      document.getElementById('calc-total').innerText = '$' + total.toFixed(2) + ' USD';
-      document.getElementById('calc-breakdown').innerText = `Base: $${subtotal.toFixed(2)} USD | Seguro/Cargos: $${seguro.toFixed(2)} USD`;
+      document.getElementById('calc-total').innerText = '$' + total.toFixed(2) + ' COP';
+      document.getElementById('calc-breakdown').innerText = `Base: $${subtotal.toFixed(2)} COP | Seguro/Cargos: $${seguro.toFixed(2)} COP`;
       document.getElementById('calc-result').classList.remove('hidden');
     }
 

@@ -679,8 +679,8 @@
       const seguroRate = parseFloat(document.getElementById('calc-seguro').value);
 
       let baseRate = 50;
-      if (tipo === 'aereo') baseRate = 120;
-      if (tipo === 'maritimo') baseRate = 30;
+      if (tipo === 'aereo') baseRate = 120000;
+      if (tipo === 'maritimo') baseRate = 30000;
 
       const subtotal = baseRate + (peso * 1.5) + (volumen * 25);
       const seguro = subtotal * seguroRate;

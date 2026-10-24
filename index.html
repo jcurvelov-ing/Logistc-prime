@@ -192,7 +192,7 @@
               <div class="flex justify-between items-start">
                 <div>
                   <p class="text-xs text-slate-400 font-medium">Ingresos Estimados</p>
-                  <h3 class="text-2xl font-bold text-white mt-1">$184.200 COP</h3>
+                  <h3 class="text-2xl font-bold text-white mt-1" id="kpi-ingresos">$ 1.842.000.000 COP</h3>
                 </div>
                 <div class="p-2 bg-blue-500/10 rounded-lg border border-blue-500/20 text-blue-400">
                   <i data-lucide="dollar-sign" class="w-5 h-5"></i>
@@ -292,7 +292,7 @@
               <div class="flex justify-between items-start">
                 <div>
                   <h4 class="font-bold text-white">Bodega Central LP-01</h4>
-                  <p class="text-xs text-slate-400">Zona Franca - Puerto Principal</p>
+                  <p class="text-xs text-slate-400">Zona Franca - Puerto Cartagena</p>
                 </div>
                 <span class="px-2 py-1 text-[10px] font-bold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Operativa</span>
               </div>
@@ -317,7 +317,7 @@
               <div class="flex justify-between items-start">
                 <div>
                   <h4 class="font-bold text-white">Bodega Norte LP-02</h4>
-                  <p class="text-xs text-slate-400">Hub Aeropuerto Internacional</p>
+                  <p class="text-xs text-slate-400">Hub Aeropuerto El Dorado</p>
                 </div>
                 <span class="px-2 py-1 text-[10px] font-bold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Operativa</span>
               </div>
@@ -342,7 +342,7 @@
               <div class="flex justify-between items-start">
                 <div>
                   <h4 class="font-bold text-white">Bodega Sur LP-03</h4>
-                  <p class="text-xs text-slate-400">Parque Industrial Sur</p>
+                  <p class="text-xs text-slate-400">Terminal Logístico Buenaventura</p>
                 </div>
                 <span class="px-2 py-1 text-[10px] font-bold rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">Mantenimiento</span>
               </div>
@@ -364,32 +364,59 @@
           </div>
         </section>
 
-        <!-- SECTION: CALCULADORA DE DESPACHOS -->
+        <!-- SECTION: CALCULADORA DE DESPACHOS AMÉRICA -->
         <section id="tab-cotizador" class="tab-content space-y-6 hidden">
           <div class="max-w-2xl mx-auto bg-slate-800/40 border border-slate-700/60 rounded-xl p-6">
-            <h3 class="text-lg font-bold text-white mb-1">Calculadora de Tarifas - Logistic Prime</h3>
-            <p class="text-xs text-slate-400 mb-6">Herramienta de estimación automatizada de costos de flete internacional y nacional.</p>
+            <h3 class="text-lg font-bold text-white mb-1">Calculadora de Tarifas por Distancia - América</h3>
+            <p class="text-xs text-slate-400 mb-6">Cotizador dinámico desde Colombia hacia 11 destinos clave en el continente americano.</p>
 
             <form id="calc-form" onsubmit="calcularCosto(event)" class="space-y-4">
+              
+              <!-- Fila: Origen y Destino -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label class="block text-xs text-slate-300 font-medium mb-1">Tipo de Transporte</label>
+                  <label class="block text-xs text-slate-300 font-medium mb-1">País de Origen</label>
+                  <input type="text" value="Colombia (Fijo)" disabled class="w-full bg-slate-950/80 border border-slate-800 rounded-lg p-2.5 text-sm text-indigo-400 font-semibold cursor-not-allowed">
+                </div>
+                <div>
+                  <label class="block text-xs text-slate-300 font-medium mb-1">País de Destino</label>
+                  <select id="calc-destino" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                    <option value="venezuela">Venezuela (Cercano / Frontera)</option>
+                    <option value="ecuador">Ecuador (Cercano / Frontera)</option>
+                    <option value="panama">Panamá (Cercano)</option>
+                    <option value="peru">Perú (Medio)</option>
+                    <option value="chile">Chile (Medio)</option>
+                    <option value="mexico">México (Medio)</option>
+                    <option value="usa">Estados Unidos (Largo)</option>
+                    <option value="brasil">Brasil (Largo)</option>
+                    <option value="argentina">Argentina (Distancia Larga)</option>
+                    <option value="canada">Canadá (Distancia Larga)</option>
+                    <option value="colombia">Colombia (Nacional Inter-bodega)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Fila: Tipo Transporte y Peso -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs text-slate-300 font-medium mb-1">Modo de Transporte</label>
                   <select id="calc-tipo" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
-                    <option value="maritimo">Marítimo (FCL/LCL)</option>
                     <option value="aereo">Aéreo Express</option>
+                    <option value="maritimo">Marítimo (FCL/LCL)</option>
                     <option value="terrestre">Terrestre Carga Pesada</option>
                   </select>
                 </div>
                 <div>
                   <label class="block text-xs text-slate-300 font-medium mb-1">Peso Estimado (Kg)</label>
-                  <input type="number" id="calc-peso" required min="1" placeholder="Ej: 500" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                  <input type="number" id="calc-peso" required min="1" placeholder="Ej: 200" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
                 </div>
               </div>
 
+              <!-- Fila: Volumen y Seguro -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label class="block text-xs text-slate-300 font-medium mb-1">Volumen (M³)</label>
-                  <input type="number" step="0.1" id="calc-volumen" required min="0.1" placeholder="Ej: 2.5" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                  <input type="number" step="0.1" id="calc-volumen" required min="0.1" placeholder="Ej: 3" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
                 </div>
                 <div>
                   <label class="block text-xs text-slate-300 font-medium mb-1">Seguro de Carga</label>
@@ -408,8 +435,8 @@
 
             <div id="calc-result" class="mt-6 p-4 bg-indigo-950/40 border border-indigo-500/30 rounded-lg hidden">
               <p class="text-xs text-indigo-300 uppercase tracking-wider font-semibold">Estimación de Costo Final</p>
-              <h4 class="text-2xl font-bold text-white mt-1" id="calc-total">$0.00 COP</h4>
-              <p class="text-xs text-slate-400 mt-2" id="calc-breakdown">Incluye tarifa base, volumen y seguro contratado.</p>
+              <h4 class="text-2xl font-bold text-white mt-1" id="calc-total">$ 0 COP</h4>
+              <p class="text-xs text-slate-400 mt-2" id="calc-breakdown">Incluye tarifa base según distancia, peso por Kilo y seguro contratado.</p>
             </div>
           </div>
         </section>
@@ -470,7 +497,7 @@
         </div>
         <div>
           <label class="block text-xs text-slate-300 font-medium mb-1">Origen / Destino</label>
-          <input type="text" id="nuevo-origen" required placeholder="Ej: Shanghái -> Valparaíso" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200">
+          <input type="text" id="nuevo-origen" required placeholder="Ej: Colombia -> Argentina" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200">
         </div>
         <div>
           <label class="block text-xs text-slate-300 font-medium mb-1">Estado Inicial</label>
@@ -513,8 +540,8 @@
           <ul class="list-disc list-inside text-xs space-y-1 text-slate-300">
             <li><strong>RF-01:</strong> Gestión en tiempo real del estado de trámites de aduana e importaciones/exportaciones.</li>
             <li><strong>RF-02:</strong> Visualización de métricas de ocupación y volumen en M3 de las bodegas operativas.</li>
-            <li><strong>RF-03:</strong> Módulo de cálculo automático de tarifas según modalidad (aéreo, marítimo, terrestre), peso y volumen.</li>
-            <li><strong>RF-04:</strong> Módulo de generación e impresión de reportes executivos en formato estándar.</li>
+            <li><strong>RF-03:</strong> Módulo de cálculo automático de tarifas según distancia geográfica, modalidad (aéreo, marítimo, terrestre), peso y volumen.</li>
+            <li><strong>RF-04:</strong> Módulo de generación e impresión de reportes ejecutivos en formato estándar.</li>
           </ul>
         </div>
 
@@ -537,11 +564,20 @@
   <script>
     // INITIAL STATE & MOCK DATA FOR LOGISTIC PRIME
     let tramitesData = [
-      { id: 'LP-8921', cliente: 'AeroTech Corp', tipo: 'Importación Marítima', origen: 'Shanghái -> Valparaíso', estado: 'Aprobado' },
-      { id: 'LP-8922', cliente: 'Global Food Import', tipo: 'Despacho Aduanero', origen: 'Lima -> Bogotá', estado: 'En Revisión' },
-      { id: 'LP-8923', cliente: 'Industrias San José', tipo: 'Exportación Aérea', origen: 'Santiago -> Miami', estado: 'Pendiente' },
-      { id: 'LP-8924', cliente: 'TechLogistics SA', tipo: 'Tránsito Terrestre', origen: 'Buenos Aires -> Santiago', estado: 'Aprobado' }
+      { id: 'LP-8921', cliente: 'AeroTech Corp', tipo: 'Importación Marítima', origen: 'Colombia -> Venezuela', estado: 'Aprobado' },
+      { id: 'LP-8922', cliente: 'Global Food Import', tipo: 'Despacho Aduanero', origen: 'Colombia -> Perú', estado: 'En Revisión' },
+      { id: 'LP-8923', cliente: 'Industrias San José', tipo: 'Exportación Aérea', origen: 'Colombia -> Argentina', estado: 'Pendiente' },
+      { id: 'LP-8924', cliente: 'TechLogistics SA', tipo: 'Tránsito Terrestre', origen: 'Colombia -> Ecuador', estado: 'Aprobado' }
     ];
+
+    // FORMATO MONEDA COLOMBIANA (COP con Puntos)
+    function formatearCOP(valor) {
+      return new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        maximumFractionDigits: 0
+      }).format(valor);
+    }
 
     // INITIALIZATION
     window.onload = function() {
@@ -568,7 +604,7 @@
         'dashboard': 'Dashboard Operativo - Logistic Prime',
         'tramites': 'Gestión de Trámites Logísticos',
         'bodegas': 'Control de Bodegas e Inventario',
-        'cotizador': 'Calculadora de Envíos y Tarifas',
+        'cotizador': 'Calculadora de Envíos y Tarifas por Distancia',
         'reportes': 'Reportes Universitarios y Analytics'
       };
       document.getElementById('page-title').innerText = titles[tabId];
@@ -670,24 +706,47 @@
       renderTramitesTable();
     }
 
-    // CALCULATOR LOGIC
+    // CALCULATOR LOGIC (TARIFAS DESDE COLOMBIA A AMÉRICA POR DISTANCIA)
     function calcularCosto(e) {
       e.preventDefault();
+      
+      const destino = document.getElementById('calc-destino').value;
       const tipo = document.getElementById('calc-tipo').value;
       const peso = parseFloat(document.getElementById('calc-peso').value);
       const volumen = parseFloat(document.getElementById('calc-volumen').value);
       const seguroRate = parseFloat(document.getElementById('calc-seguro').value);
 
-      let baseRate = 50;
-      if (tipo === 'aereo') baseRate = 120000;
-      if (tipo === 'maritimo') baseRate = 30000;
+      // TABLA DE TARIFAS POR KILO DESDE COLOMBIA (AÉREO / MARÍTIMO / TERRESTRE)
+      const tarifasPorPais = {
+        'venezuela': { aereo: 120000, maritimo: 30000, terrestre: 18000, nombre: 'Venezuela', dias: '2 - 4 días' },
+        'ecuador':   { aereo: 120000, maritimo: 30000, terrestre: 18000, nombre: 'Ecuador', dias: '2 - 3 días' },
+        'panama':    { aereo: 125000, maritimo: 32000, terrestre: 20000, nombre: 'Panamá', dias: '3 - 5 días' },
+        'peru':      { aereo: 135000, maritimo: 35000, terrestre: 25000, nombre: 'Perú', dias: '4 - 6 días' },
+        'chile':     { aereo: 160000, maritimo: 45000, terrestre: 35000, nombre: 'Chile', dias: '6 - 9 días' },
+        'mexico':    { aereo: 165000, maritimo: 45000, terrestre: 40000, nombre: 'México', dias: '5 - 8 días' },
+        'usa':       { aereo: 170000, maritimo: 48000, terrestre: 45000, nombre: 'Estados Unidos', dias: '4 - 7 días' },
+        'brasil':    { aereo: 175000, maritimo: 48000, terrestre: 42000, nombre: 'Brasil', dias: '6 - 10 días' },
+        'argentina': { aereo: 180000, maritimo: 50000, terrestre: 48000, nombre: 'Argentina', dias: '7 - 12 días' },
+        'canada':    { aereo: 185000, maritimo: 52000, terrestre: 50000, nombre: 'Canadá', dias: '6 - 10 días' },
+        'colombia':  { aereo: 18000,  maritimo: 8000,   terrestre: 6500,  nombre: 'Colombia (Nacional)', dias: '1 - 2 días' }
+      };
 
-      const subtotal = baseRate + (peso * 1.5) + (volumen * 25);
+      const infoPais = tarifasPorPais[destino] || tarifasPorPais['venezuela'];
+      let tarifaKilo = infoPais[tipo] || infoPais['aereo'];
+
+      // Subtotal base basado en Peso y Tarifa por Kilo + recargo volumétrico ($120.000 por M3)
+      const costoPeso = peso * tarifaKilo;
+      const costoVolumen = volumen * 120000;
+      const subtotal = costoPeso + costoVolumen;
+
+      // Cálculo del seguro contratado
       const seguro = subtotal * seguroRate;
       const total = subtotal + seguro;
 
-      document.getElementById('calc-total').innerText = '$' + total.toFixed(2) + ' COP';
-      document.getElementById('calc-breakdown').innerText = `Base: $${subtotal.toFixed(2)} COP | Seguro/Cargos: $${seguro.toFixed(2)} COP`;
+      document.getElementById('calc-total').innerText = formatearCOP(total);
+      document.getElementById('calc-breakdown').innerText = 
+        `Ruta: Colombia ➔ ${infoPais.nombre} | Tarifa: ${formatearCOP(tarifaKilo)}/Kg | Base: ${formatearCOP(subtotal)} | Seguro: ${formatearCOP(seguro)} | Tiempo Est.: ${infoPais.dias}`;
+      
       document.getElementById('calc-result').classList.remove('hidden');
     }
 

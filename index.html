@@ -158,18 +158,19 @@
               </p>
             </div>
 
+            <!-- Card de Capacidad Ocupada Actualizada -->
             <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-5 relative overflow-hidden">
               <div class="flex justify-between items-start">
                 <div>
-                  <p class="text-xs text-slate-400 font-medium">Capacidad Ocupada</p>
-                  <h3 class="text-2xl font-bold text-white mt-1">78.4%</h3>
+                  <p class="text-xs text-slate-400 font-medium">Capacidad Ocupada (Colombia)</p>
+                  <h3 class="text-2xl font-bold text-white mt-1">7.488.000 m³</h3>
                 </div>
                 <div class="p-2 bg-amber-500/10 rounded-lg border border-amber-500/20 text-amber-400">
                   <i data-lucide="boxes" class="w-5 h-5"></i>
                 </div>
               </div>
               <p class="text-xs text-amber-400 flex items-center mt-3">
-                <i data-lucide="alert-circle" class="w-3.5 h-3.5 mr-1"></i> Bodega Principal al 85%
+                <i data-lucide="alert-circle" class="w-3.5 h-3.5 mr-1"></i> 78% de 9.600.000 m³ totales (Triple Capacidad)
               </p>
             </div>
 
@@ -263,7 +264,7 @@
               </div>
             </div>
 
-            <!-- Table -->
+            <!-- Table con columna Peso (Kg) -->
             <div class="overflow-x-auto">
               <table class="w-full text-left text-sm text-slate-300">
                 <thead class="bg-slate-900/60 text-xs uppercase text-slate-400 border-b border-slate-700/60">
@@ -271,6 +272,7 @@
                     <th class="px-6 py-3">Código</th>
                     <th class="px-6 py-3">Cliente</th>
                     <th class="px-6 py-3">Tipo de Trámite</th>
+                    <th class="px-6 py-3">Peso (Kg)</th>
                     <th class="px-6 py-3">Origen / Destino</th>
                     <th class="px-6 py-3">Estado</th>
                     <th class="px-6 py-3 text-right">Acción</th>
@@ -284,83 +286,172 @@
           </div>
         </section>
 
-        <!-- SECTION: BODEGAS E INVENTARIO -->
+        <!-- SECTION: BODEGAS E INVENTARIO (ACTUALIZADO A BODEGAS POR PAÍS) -->
         <section id="tab-bodegas" class="tab-content space-y-6 hidden">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Bodega 1 -->
+            
+            <!-- Bodega Colombia (Triple de Capacidad: 9,600,000 m³) -->
+            <div class="bg-slate-800/40 border border-indigo-500/40 rounded-xl p-5 space-y-4 relative">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h4 class="font-bold text-white flex items-center">
+                    <span class="mr-2">🇨🇴</span> Hub Principal Colombia
+                  </h4>
+                  <p class="text-xs text-indigo-300">Sede Central (Cartagena - Bogotá - B/ventura)</p>
+                </div>
+                <span class="px-2 py-1 text-[10px] font-bold rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Triple Sede</span>
+              </div>
+              <div class="space-y-2">
+                <div class="flex justify-between text-xs text-slate-300">
+                  <span>Capacidad Utilizada</span>
+                  <span class="font-bold">78%</span>
+                </div>
+                <div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
+                  <div class="bg-indigo-500 h-full" style="width: 78%"></div>
+                </div>
+              </div>
+              <ul class="text-xs text-slate-400 space-y-1.5 pt-2 border-t border-slate-700/40">
+                <li class="font-semibold text-slate-200">• Capacidad Máxima: 9.600.000 m³</li>
+                <li>• Carga Almacenada: 7.488.000 m³</li>
+                <li>• Zonas de Carga: 3 Mega-Terminales</li>
+              </ul>
+            </div>
+
+            <!-- Bodega Ecuador (3,200,000 m³) -->
             <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 space-y-4">
               <div class="flex justify-between items-start">
                 <div>
-                  <h4 class="font-bold text-white">Bodega Central LP-01</h4>
-                  <p class="text-xs text-slate-400">Zona Franca - Puerto Cartagena</p>
+                  <h4 class="font-bold text-white flex items-center">
+                    <span class="mr-2">🇪🇨</span> Hub Ecuador
+                  </h4>
+                  <p class="text-xs text-slate-400">Terminal Logístico Guayaquil</p>
                 </div>
                 <span class="px-2 py-1 text-[10px] font-bold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Operativa</span>
               </div>
               <div class="space-y-2">
                 <div class="flex justify-between text-xs text-slate-300">
                   <span>Capacidad Utilizada</span>
-                  <span class="font-bold">85%</span>
+                  <span class="font-bold">65%</span>
                 </div>
                 <div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
-                  <div class="bg-amber-500 h-full" style="width: 85%"></div>
+                  <div class="bg-emerald-500 h-full" style="width: 65%"></div>
                 </div>
               </div>
               <ul class="text-xs text-slate-400 space-y-1.5 pt-2 border-t border-slate-700/40">
-                <li>• Capacidad Máxima: 12,000 M3</li>
-                <li>• Carga Consolidada: 10,200 M3</li>
-                <li>• Contenedores Activos: 42 TEU</li>
+                <li class="font-semibold text-slate-200">• Capacidad Máxima: 3.200.000 m³</li>
+                <li>• Carga Almacenada: 2.080.000 m³</li>
+                <li>• Bahías Activas: 24 Módulos</li>
               </ul>
             </div>
 
-            <!-- Bodega 2 -->
+            <!-- Bodega Venezuela (3,200,000 m³) -->
             <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 space-y-4">
               <div class="flex justify-between items-start">
                 <div>
-                  <h4 class="font-bold text-white">Bodega Norte LP-02</h4>
-                  <p class="text-xs text-slate-400">Hub Aeropuerto El Dorado</p>
+                  <h4 class="font-bold text-white flex items-center">
+                    <span class="mr-2">🇻🇪</span> Hub Venezuela
+                  </h4>
+                  <p class="text-xs text-slate-400">Zona Franca Puerto Cabello</p>
                 </div>
                 <span class="px-2 py-1 text-[10px] font-bold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Operativa</span>
               </div>
               <div class="space-y-2">
                 <div class="flex justify-between text-xs text-slate-300">
                   <span>Capacidad Utilizada</span>
-                  <span class="font-bold">62%</span>
+                  <span class="font-bold">52%</span>
                 </div>
                 <div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
-                  <div class="bg-indigo-500 h-full" style="width: 62%"></div>
+                  <div class="bg-blue-500 h-full" style="width: 52%"></div>
                 </div>
               </div>
               <ul class="text-xs text-slate-400 space-y-1.5 pt-2 border-t border-slate-700/40">
-                <li>• Capacidad Máxima: 8,500 M3</li>
-                <li>• Carga Refrigerada: 5,270 M3</li>
-                <li>• Posiciones Racks: 1,200</li>
+                <li class="font-semibold text-slate-200">• Capacidad Máxima: 3.200.000 m³</li>
+                <li>• Carga Almacenada: 1.664.000 m³</li>
+                <li>• Bahías Activas: 18 Módulos</li>
               </ul>
             </div>
 
-            <!-- Bodega 3 -->
+            <!-- Bodega Argentina (3,200,000 m³) -->
             <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 space-y-4">
               <div class="flex justify-between items-start">
                 <div>
-                  <h4 class="font-bold text-white">Bodega Sur LP-03</h4>
-                  <p class="text-xs text-slate-400">Terminal Logístico Buenaventura</p>
+                  <h4 class="font-bold text-white flex items-center">
+                    <span class="mr-2">🇦🇷</span> Hub Argentina
+                  </h4>
+                  <p class="text-xs text-slate-400">Terminal Buenos Aires Sur</p>
                 </div>
-                <span class="px-2 py-1 text-[10px] font-bold rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">Mantenimiento</span>
+                <span class="px-2 py-1 text-[10px] font-bold rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">Ampliación</span>
               </div>
               <div class="space-y-2">
                 <div class="flex justify-between text-xs text-slate-300">
                   <span>Capacidad Utilizada</span>
-                  <span class="font-bold">34%</span>
+                  <span class="font-bold">40%</span>
                 </div>
                 <div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
-                  <div class="bg-emerald-500 h-full" style="width: 34%"></div>
+                  <div class="bg-amber-500 h-full" style="width: 40%"></div>
                 </div>
               </div>
               <ul class="text-xs text-slate-400 space-y-1.5 pt-2 border-t border-slate-700/40">
-                <li>• Capacidad Máxima: 6,000 M3</li>
-                <li>• Carga General: 2,040 M3</li>
-                <li>• Bahías de Carga: 8 disponibles</li>
+                <li class="font-semibold text-slate-200">• Capacidad Máxima: 3.200.000 m³</li>
+                <li>• Carga Almacenada: 1.280.000 m³</li>
+                <li>• Bahías Activas: 15 Módulos</li>
               </ul>
             </div>
+
+            <!-- Bodega Estados Unidos (3,200,000 m³) -->
+            <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 space-y-4">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h4 class="font-bold text-white flex items-center">
+                    <span class="mr-2">🇺🇸</span> Hub Estados Unidos
+                  </h4>
+                  <p class="text-xs text-slate-400">Port of Miami Logistic Center</p>
+                </div>
+                <span class="px-2 py-1 text-[10px] font-bold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Operativa</span>
+              </div>
+              <div class="space-y-2">
+                <div class="flex justify-between text-xs text-slate-300">
+                  <span>Capacidad Utilizada</span>
+                  <span class="font-bold">81%</span>
+                </div>
+                <div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
+                  <div class="bg-emerald-500 h-full" style="width: 81%"></div>
+                </div>
+              </div>
+              <ul class="text-xs text-slate-400 space-y-1.5 pt-2 border-t border-slate-700/40">
+                <li class="font-semibold text-slate-200">• Capacidad Máxima: 3.200.000 m³</li>
+                <li>• Carga Almacenada: 2.592.000 m³</li>
+                <li>• Bahías Activas: 30 Módulos</li>
+              </ul>
+            </div>
+
+            <!-- Bodega México (3,200,000 m³) -->
+            <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 space-y-4">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h4 class="font-bold text-white flex items-center">
+                    <span class="mr-2">🇲🇽</span> Hub México
+                  </h4>
+                  <p class="text-xs text-slate-400">Terminal Veracruz Norte</p>
+                </div>
+                <span class="px-2 py-1 text-[10px] font-bold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Operativa</span>
+              </div>
+              <div class="space-y-2">
+                <div class="flex justify-between text-xs text-slate-300">
+                  <span>Capacidad Utilizada</span>
+                  <span class="font-bold">58%</span>
+                </div>
+                <div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
+                  <div class="bg-indigo-500 h-full" style="width: 58%"></div>
+                </div>
+              </div>
+              <ul class="text-xs text-slate-400 space-y-1.5 pt-2 border-t border-slate-700/40">
+                <li class="font-semibold text-slate-200">• Capacidad Máxima: 3.200.000 m³</li>
+                <li>• Carga Almacenada: 1.856.000 m³</li>
+                <li>• Bahías Activas: 20 Módulos</li>
+              </ul>
+            </div>
+
           </div>
         </section>
 
@@ -486,14 +577,20 @@
           <label class="block text-xs text-slate-300 font-medium mb-1">Cliente</label>
           <input type="text" id="nuevo-cliente" required placeholder="Nombre de la empresa" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200">
         </div>
-        <div>
-          <label class="block text-xs text-slate-300 font-medium mb-1">Tipo de Trámite</label>
-          <select id="nuevo-tipo" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200">
-            <option value="Importación Marítima">Importación Marítima</option>
-            <option value="Exportación Aérea">Exportación Aérea</option>
-            <option value="Despacho Aduanero">Despacho Aduanero</option>
-            <option value="Tránsito Terrestre">Tránsito Terrestre</option>
-          </select>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-slate-300 font-medium mb-1">Tipo de Trámite</label>
+            <select id="nuevo-tipo" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200">
+              <option value="Importación Marítima">Importación Marítima</option>
+              <option value="Exportación Aérea">Exportación Aérea</option>
+              <option value="Despacho Aduanero">Despacho Aduanero</option>
+              <option value="Tránsito Terrestre">Tránsito Terrestre</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-300 font-medium mb-1">Peso (Kg)</label>
+            <input type="number" id="nuevo-peso" required min="1" placeholder="Ej: 12500" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200">
+          </div>
         </div>
         <div>
           <label class="block text-xs text-slate-300 font-medium mb-1">Origen / Destino</label>
@@ -515,7 +612,7 @@
     </div>
   </div>
 
-  <!-- MODAL: FICHA TÉCNICA SW (DOCUMENTACIÓN INGENIERÍA) -->
+  <!-- MODAL: FICHA TÉCNICA SW -->
   <div id="ficha-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
     <div class="bg-slate-900 border border-slate-700 rounded-xl max-w-3xl w-full max-h-[85vh] flex flex-col shadow-2xl">
       <div class="p-4 border-b border-slate-800 flex justify-between items-center">
@@ -562,12 +659,12 @@
 
   <!-- JAVASCRIPT LOGIC -->
   <script>
-    // INITIAL STATE & MOCK DATA FOR LOGISTIC PRIME
+    // DATA INICIAL CON CAMPO PESO KG
     let tramitesData = [
-      { id: 'LP-8921', cliente: 'AeroTech Corp', tipo: 'Importación Marítima', origen: 'Colombia -> Venezuela', estado: 'Aprobado' },
-      { id: 'LP-8922', cliente: 'Global Food Import', tipo: 'Despacho Aduanero', origen: 'Colombia -> Perú', estado: 'En Revisión' },
-      { id: 'LP-8923', cliente: 'Industrias San José', tipo: 'Exportación Aérea', origen: 'Colombia -> Argentina', estado: 'Pendiente' },
-      { id: 'LP-8924', cliente: 'TechLogistics SA', tipo: 'Tránsito Terrestre', origen: 'Colombia -> Ecuador', estado: 'Aprobado' }
+      { id: 'LP-8921', cliente: 'AeroTech Corp', tipo: 'Importación Marítima', pesoKg: 12500, origen: 'Colombia -> Venezuela', estado: 'Aprobado' },
+      { id: 'LP-8922', cliente: 'Global Food Import', tipo: 'Despacho Aduanero', pesoKg: 4200, origen: 'Colombia -> Perú', estado: 'En Revisión' },
+      { id: 'LP-8923', cliente: 'Industrias San José', tipo: 'Exportación Aérea', pesoKg: 1850, origen: 'Colombia -> Argentina', estado: 'Pendiente' },
+      { id: 'LP-8924', cliente: 'TechLogistics SA', tipo: 'Tránsito Terrestre', pesoKg: 28000, origen: 'Colombia -> Ecuador', estado: 'Aprobado' }
     ];
 
     // FORMATO MONEDA COLOMBIANA (COP con Puntos)
@@ -577,6 +674,11 @@
         currency: 'COP',
         maximumFractionDigits: 0
       }).format(valor);
+    }
+
+    // FORMATO NÚMEROS CON PUNTOS PARA KILOS Y M3
+    function formatearNumero(valor) {
+      return new Intl.NumberFormat('es-CO').format(valor);
     }
 
     // INITIALIZATION
@@ -603,7 +705,7 @@
       const titles = {
         'dashboard': 'Dashboard Operativo - Logistic Prime',
         'tramites': 'Gestión de Trámites Logísticos',
-        'bodegas': 'Control de Bodegas e Inventario',
+        'bodegas': 'Control de Bodegas e Inventario por País',
         'cotizador': 'Calculadora de Envíos y Tarifas por Distancia',
         'reportes': 'Reportes Universitarios y Analytics'
       };
@@ -631,6 +733,7 @@
             <td class="px-6 py-4 font-mono font-bold text-indigo-400">${item.id}</td>
             <td class="px-6 py-4 text-white font-medium">${item.cliente}</td>
             <td class="px-6 py-4">${item.tipo}</td>
+            <td class="px-6 py-4 font-semibold text-slate-200">${formatearNumero(item.pesoKg)} Kg</td>
             <td class="px-6 py-4 text-xs text-slate-400">${item.origen}</td>
             <td class="px-6 py-4">
               <span class="px-2.5 py-1 rounded-full text-xs border ${badgeColor}">${item.estado}</span>
@@ -670,6 +773,7 @@
             <td class="px-6 py-4 font-mono font-bold text-indigo-400">${item.id}</td>
             <td class="px-6 py-4 text-white font-medium">${item.cliente}</td>
             <td class="px-6 py-4">${item.tipo}</td>
+            <td class="px-6 py-4 font-semibold text-slate-200">${formatearNumero(item.pesoKg)} Kg</td>
             <td class="px-6 py-4 text-xs text-slate-400">${item.origen}</td>
             <td class="px-6 py-4">
               <span class="px-2.5 py-1 rounded-full text-xs border ${badgeColor}">${item.estado}</span>
@@ -691,10 +795,11 @@
       const newId = 'LP-' + Math.floor(1000 + Math.random() * 9000);
       const cliente = document.getElementById('nuevo-cliente').value;
       const tipo = document.getElementById('nuevo-tipo').value;
+      const pesoKg = parseFloat(document.getElementById('nuevo-peso').value) || 0;
       const origen = document.getElementById('nuevo-origen').value;
       const estado = document.getElementById('nuevo-estado').value;
 
-      tramitesData.unshift({ id: newId, cliente, tipo, origen, estado });
+      tramitesData.unshift({ id: newId, cliente, tipo, pesoKg, origen, estado });
       renderTramitesTable();
       toggleModal('modal-nuevo-tramite');
       e.target.reset();
@@ -706,7 +811,7 @@
       renderTramitesTable();
     }
 
-    // CALCULATOR LOGIC (TARIFAS DESDE COLOMBIA A AMÉRICA POR DISTANCIA)
+    // CALCULATOR LOGIC
     function calcularCosto(e) {
       e.preventDefault();
       
@@ -716,7 +821,6 @@
       const volumen = parseFloat(document.getElementById('calc-volumen').value);
       const seguroRate = parseFloat(document.getElementById('calc-seguro').value);
 
-      // TABLA DE TARIFAS POR KILO DESDE COLOMBIA (AÉREO / MARÍTIMO / TERRESTRE)
       const tarifasPorPais = {
         'venezuela': { aereo: 120000, maritimo: 30000, terrestre: 18000, nombre: 'Venezuela', dias: '2 - 4 días' },
         'ecuador':   { aereo: 120000, maritimo: 30000, terrestre: 18000, nombre: 'Ecuador', dias: '2 - 3 días' },
@@ -734,12 +838,10 @@
       const infoPais = tarifasPorPais[destino] || tarifasPorPais['venezuela'];
       let tarifaKilo = infoPais[tipo] || infoPais['aereo'];
 
-      // Subtotal base basado en Peso y Tarifa por Kilo + recargo volumétrico ($120.000 por M3)
       const costoPeso = peso * tarifaKilo;
       const costoVolumen = volumen * 120000;
       const subtotal = costoPeso + costoVolumen;
 
-      // Cálculo del seguro contratado
       const seguro = subtotal * seguroRate;
       const total = subtotal + seguro;
 
@@ -757,7 +859,6 @@
 
     // CHARTS CONFIGURATION
     function initCharts() {
-      // Line Chart
       const ctx1 = document.getElementById('chart-tramites').getContext('2d');
       new Chart(ctx1, {
         type: 'line',
@@ -783,7 +884,6 @@
         }
       });
 
-      // Pie Chart
       const ctx2 = document.getElementById('chart-tipos').getContext('2d');
       new Chart(ctx2, {
         type: 'doughnut',

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Logistic Prime - Gestión Logística Colombiana</title>
+  <title>Logistic Prime - SaaS de Gestión Logística</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Chart.js CDN -->
@@ -310,6 +310,7 @@
                 <thead class="bg-slate-900/60 text-xs uppercase text-slate-400 border-b border-slate-700/60">
                   <tr>
                     <th class="px-6 py-3">Código</th>
+                    <th class="px-6 py-3">Fecha Inicio</th>
                     <th class="px-6 py-3">Cliente</th>
                     <th class="px-6 py-3">Tipo de Trámite</th>
                     <th class="px-6 py-3">Peso (Kg)</th>
@@ -621,7 +622,7 @@
     </main>
   </div>
 
-  <!-- MODAL: NUEVO TRÁMITE -->
+  <!-- MODAL: NUEVO TRÁMITE CON CAMPO DE FECHA INICIO -->
   <div id="modal-nuevo-tramite" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
     <div class="bg-slate-900 border border-slate-700 rounded-xl max-w-md w-full p-6 space-y-4 shadow-2xl">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -635,6 +636,12 @@
           <label class="block text-xs text-slate-300 font-medium mb-1">Cliente</label>
           <input type="text" id="nuevo-cliente" required placeholder="Nombre de la empresa" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200">
         </div>
+
+        <div>
+          <label class="block text-xs text-slate-300 font-medium mb-1">Fecha de Inicio del Trámite</label>
+          <input type="date" id="nuevo-fecha" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200">
+        </div>
+
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-xs text-slate-300 font-medium mb-1">Tipo de Trámite</label>
@@ -692,7 +699,7 @@
         <div>
           <h4 class="font-bold text-indigo-400 uppercase text-xs tracking-wider mb-2">2. Requerimientos Funcionales (RF)</h4>
           <ul class="list-disc list-inside text-xs space-y-1 text-slate-300">
-            <li><strong>RF-01:</strong> Gestión en tiempo real del estado de trámites de aduana e importaciones/exportaciones.</li>
+            <li><strong>RF-01:</strong> Gestión en tiempo real del estado de trámites de aduana e importaciones/exportaciones con registro de fecha de inicio.</li>
             <li><strong>RF-02:</strong> Visualización de métricas de ocupación y volumen en M3 de las bodegas operativas.</li>
             <li><strong>RF-03:</strong> Módulo de cálculo automático de tarifas según distancia geográfica, modalidad (aéreo, marítimo, terrestre), peso y volumen.</li>
             <li><strong>RF-04:</strong> Módulo de generación e impresión de reportes ejecutivos en formato estándar.</li>
@@ -720,18 +727,16 @@
     // ESTADO DE SESIÓN Y USUARIO ACTUAL
     let currentUser = null;
 
-    // DATA INICIAL CON CAMPO PESO KG
+    // DATA INICIAL CON CAMPO PESO KG Y FECHA DE INICIO
     let tramitesData = [
-      { id: 'LP-8921', cliente: 'AeroTech Corp', tipo: 'Importación Marítima', pesoKg: 12500, origen: 'Colombia -> Venezuela', estado: 'Aprobado' },
-      { id: 'LP-8922', cliente: 'Global Food Import', tipo: 'Despacho Aduanero', pesoKg: 4200, origen: 'Colombia -> Perú', estado: 'En Revisión' },
-      { id: 'LP-8923', cliente: 'Industrias San José', tipo: 'Exportación Aérea', pesoKg: 1850, origen: 'Colombia -> Argentina', estado: 'Pendiente' },
-      { id: 'LP-8924', cliente: 'TechLogistics SA', tipo: 'Tránsito Terrestre', pesoKg: 28000, origen: 'Colombia -> Ecuador', estado: 'Aprobado' }
+      { id: 'LP-8921', fechaInicio: '2026-10-15', cliente: 'AeroTech Corp', tipo: 'Importación Marítima', pesoKg: 12500, origen: 'Colombia -> Venezuela', estado: 'Aprobado' },
+      { id: 'LP-8922', fechaInicio: '2026-10-22', cliente: 'Global Food Import', tipo: 'Despacho Aduanero', pesoKg: 4200, origen: 'Colombia -> Perú', estado: 'En Revisión' },
+      { id: 'LP-8923', fechaInicio: '2026-10-28', cliente: 'Industrias San José', tipo: 'Exportación Aérea', pesoKg: 1850, origen: 'Colombia -> Argentina', estado: 'Pendiente' },
+      { id: 'LP-8924', fechaInicio: '2026-10-29', cliente: 'TechLogistics SA', tipo: 'Tránsito Terrestre', pesoKg: 28000, origen: 'Colombia -> Ecuador', estado: 'Aprobado' }
     ];
 
-    // COPIAS DE SEGURIDAD SIMULADAS (Guardan copias de las listas de datos)
-    let backupsData = [
-      { id: 'BK-1082', fecha: '2026-10-30 08:00:00', tipo: 'Automático Periódico', registros: 4, snapshot: JSON.stringify(tramitesData), estado: 'Completado' }
-    ];
+    // COPIAS DE SEGURIDAD SIMULADAS
+    let backupsData = [];
 
     // INICIALIZACIÓN
     window.onload = function() {
@@ -801,7 +806,7 @@
       renderBackupsTable();
     }
 
-    // SIMULACIÓN DE BACKUP AUTOMÁTICO PERIÓDICO (CADA 3 MINUTOS)
+    // SIMULACIÓN DE BACKUP AUTOMÁTICO PERIÓDICO
     function iniciarSimuladorBackups() {
       setInterval(() => {
         const ahora = new Date();
@@ -880,7 +885,6 @@
       lucide.createIcons();
     }
 
-    // RESTAURACIÓN DE UN BACKUP
     function restaurarBackup(bkId) {
       const backupEncontrado = backupsData.find(b => b.id === bkId);
       if (backupEncontrado && backupEncontrado.snapshot) {
@@ -952,7 +956,7 @@
       modal.classList.toggle('hidden');
     }
 
-    // RENDER TABLE CON PERMISOS DINÁMICOS
+    // RENDER TABLE CON COLUMNA DE FECHA INICIO
     function renderTramitesTable() {
       const tbody = document.getElementById('tramites-table-body');
       tbody.innerHTML = '';
@@ -972,6 +976,7 @@
         tbody.innerHTML += `
           <tr class="hover:bg-slate-800/30 transition">
             <td class="px-6 py-4 font-mono font-bold text-indigo-400">${item.id}</td>
+            <td class="px-6 py-4 text-xs font-medium text-slate-300">${item.fechaInicio || 'N/A'}</td>
             <td class="px-6 py-4 text-white font-medium">${item.cliente}</td>
             <td class="px-6 py-4">${item.tipo}</td>
             <td class="px-6 py-4 font-semibold text-slate-200">${formatearNumero(item.pesoKg)} Kg</td>
@@ -1022,6 +1027,7 @@
         tbody.innerHTML += `
           <tr class="hover:bg-slate-800/30 transition">
             <td class="px-6 py-4 font-mono font-bold text-indigo-400">${item.id}</td>
+            <td class="px-6 py-4 text-xs font-medium text-slate-300">${item.fechaInicio || 'N/A'}</td>
             <td class="px-6 py-4 text-white font-medium">${item.cliente}</td>
             <td class="px-6 py-4">${item.tipo}</td>
             <td class="px-6 py-4 font-semibold text-slate-200">${formatearNumero(item.pesoKg)} Kg</td>
@@ -1044,17 +1050,24 @@
       lucide.createIcons();
     }
 
-    // ADD NEW TRAMITE
+    // ADD NEW TRAMITE CON FECHA DE INICIO
     function guardarTramite(e) {
       e.preventDefault();
       const newId = 'LP-' + Math.floor(1000 + Math.random() * 9000);
       const cliente = document.getElementById('nuevo-cliente').value;
+      let fechaVal = document.getElementById('nuevo-fecha').value;
+      
+      if (!fechaVal) {
+        const hoy = new Date();
+        fechaVal = hoy.getFullYear() + '-' + String(hoy.getMonth() + 1).padStart(2, '0') + '-' + String(hoy.getDate()).padStart(2, '0');
+      }
+
       const tipo = document.getElementById('nuevo-tipo').value;
       const pesoKg = parseFloat(document.getElementById('nuevo-peso').value) || 0;
       const origen = document.getElementById('nuevo-origen').value;
       const estado = document.getElementById('nuevo-estado').value;
       
-      tramitesData.unshift({ id: newId, cliente, tipo, pesoKg, origen, estado });
+      tramitesData.unshift({ id: newId, fechaInicio: fechaVal, cliente, tipo, pesoKg, origen, estado });
       renderTramitesTable();
       toggleModal('modal-nuevo-tramite');
       e.target.reset();

@@ -50,16 +50,15 @@
 </head>
 <body class="h-full text-slate-100 bg-slate-900 font-sans antialiased overflow-x-hidden">
 
-  <!-- VISTA DE LOGIN CON EL ESCUDO DE LA UNICARTAGENA COMO FONDO DE PANTALLA COMPLETA -->
-  <div id="login-view" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-cover bg-center bg-no-repeat relative" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/d/d6/Escudo_Unicartagena.png');">
+  <!-- VISTA DE LOGIN CON EL ESCUDO AJUSTADO VISIBLE Y CENTRADO -->
+  <div id="login-view" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950 bg-center bg-no-repeat relative" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/d/d6/Escudo_Unicartagena.png'); background-size: contain;">
     
-    <!-- Oscurecedor de fondo (Overlay) para legibilidad -->
-    <div class="absolute inset-0 bg-slate-950/85 backdrop-blur-md"></div>
+    <!-- Oscurecedor liviano para que el escudo resalte claramente detrás -->
+    <div class="absolute inset-0 bg-slate-950/70 backdrop-blur-[2px]"></div>
 
     <div class="max-w-md w-full bg-slate-900/90 border border-slate-700/80 backdrop-blur-md rounded-2xl p-8 shadow-2xl relative z-10 overflow-hidden">
       <div class="absolute -top-10 -right-10 w-32 h-32 bg-indigo-600/20 rounded-full blur-2xl"></div>
       
-      <!-- Se mantiene el icono del camión original -->
       <div class="text-center mb-8">
         <div class="inline-flex p-3 bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-500/30 mb-3">
           <i data-lucide="truck" class="w-8 h-8 text-white"></i>
@@ -119,6 +118,13 @@
             <i data-lucide="file-text" class="w-5 h-5"></i>
             <span>Gestión de Trámites</span>
           </button>
+
+          <!-- NUEVA SECCIÓN DE GESTIÓN FINANCIERA / VALOR DE TRÁMITES -->
+          <button onclick="switchTab('financiera')" id="nav-financiera" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-emerald-400 hover:bg-emerald-500/10 transition-all border border-emerald-500/20">
+            <i data-lucide="dollar-sign" class="w-5 h-5"></i>
+            <span>Gestión Financiera</span>
+          </button>
+
           <button onclick="switchTab('bodegas')" id="nav-bodegas" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800/60 hover:text-white transition-all">
             <i data-lucide="warehouse" class="w-5 h-5"></i>
             <span>Bodegas e Inventario</span>
@@ -240,15 +246,15 @@
             <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-5 relative overflow-hidden">
               <div class="flex justify-between items-start">
                 <div>
-                  <p class="text-xs text-slate-400 font-medium">Ingresos Estimados</p>
-                  <h3 class="text-2xl font-bold text-white mt-1" id="kpi-ingresos">$ 1.842.000.000 COP</h3>
+                  <p class="text-xs text-slate-400 font-medium">Ingresos Estimados Totales</p>
+                  <h3 class="text-2xl font-bold text-emerald-400 mt-1" id="kpi-ingresos">$ 0 COP</h3>
                 </div>
-                <div class="p-2 bg-blue-500/10 rounded-lg border border-blue-500/20 text-blue-400">
+                <div class="p-2 bg-emerald-500/10 rounded-lg border border-emerald-500/20 text-emerald-400">
                   <i data-lucide="dollar-sign" class="w-5 h-5"></i>
                 </div>
               </div>
               <p class="text-xs text-slate-400 flex items-center mt-3">
-                <i data-lucide="clock" class="w-3.5 h-3.5 mr-1"></i> Actualizado hace 5 mins
+                <i data-lucide="clock" class="w-3.5 h-3.5 mr-1"></i> Suma real de todos los trámites
               </p>
             </div>
           </div>
@@ -278,7 +284,7 @@
           </div>
         </section>
 
-        <!-- SECTION: TRAMITES -->
+        <!-- SECTION: TRAMITES CON COLUMNA DE VALOR INCLUIDA -->
         <section id="tab-tramites" class="tab-content space-y-6 hidden">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-800/40 p-4 border border-slate-700/60 rounded-xl">
             <div>
@@ -316,6 +322,7 @@
                     <th class="px-6 py-3">Operación / Medio</th>
                     <th class="px-6 py-3">Peso (Kg)</th>
                     <th class="px-6 py-3">Origen / Destino</th>
+                    <th class="px-6 py-3">Valor Trámite</th>
                     <th class="px-6 py-3">Estado</th>
                     <th class="px-6 py-3 text-right">Acción</th>
                   </tr>
@@ -324,6 +331,49 @@
                   <!-- JS Injected Rows -->
                 </tbody>
               </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- NUEVA SECCIÓN DE GESTIÓN FINANCIERA (DESGLOSE COMPLETO DE VALORES) -->
+        <section id="tab-financiera" class="tab-content space-y-6 hidden">
+          <div class="bg-slate-800/40 border border-emerald-500/30 rounded-xl p-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+              <div>
+                <h3 class="text-lg font-bold text-white flex items-center">
+                  <i data-lucide="dollar-sign" class="w-5 h-5 text-emerald-400 mr-2"></i>
+                  Gestión Financiera - Desglose de Valores por Trámite
+                </h3>
+                <p class="text-xs text-slate-400">Consulta transparente de valores por cada operación. <span class="text-amber-400 font-semibold">(La modificación de precios está reservada exclusivamente para la cuenta Administrador).</span></p>
+              </div>
+              <div class="p-3 bg-emerald-950/40 border border-emerald-500/30 rounded-lg text-right">
+                <span class="text-xs text-emerald-300 uppercase font-semibold block">Total Facturado Acumulado</span>
+                <span class="text-xl font-bold text-emerald-400" id="total-financiero-resumen">$ 0 COP</span>
+              </div>
+            </div>
+
+            <div class="bg-slate-900/80 border border-slate-700/60 rounded-xl overflow-hidden">
+              <div class="p-4 border-b border-slate-800">
+                <h4 class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Detalle Financiero Operativo</h4>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-300">
+                  <thead class="bg-slate-950 text-xs uppercase text-slate-400 border-b border-slate-800">
+                    <tr>
+                      <th class="px-6 py-3">Código ID</th>
+                      <th class="px-6 py-3">Cliente</th>
+                      <th class="px-6 py-3">Modalidad</th>
+                      <th class="px-6 py-3">Ruta Comercial</th>
+                      <th class="px-6 py-3">Valor Unitario ($ COP)</th>
+                      <th class="px-6 py-3">Estado</th>
+                      <th class="px-6 py-3 text-right">Edición Admin</th>
+                    </tr>
+                  </thead>
+                  <tbody id="financiera-table-body" class="divide-y divide-slate-800">
+                    <!-- Filas inyectadas por JS -->
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </section>
@@ -623,6 +673,31 @@
     </main>
   </div>
 
+  <!-- MODAL: CAMBIAR PRECIO DEL TRÁMITE (EXCLUSIVO ADMIN) -->
+  <div id="modal-editar-precio" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h3 class="text-md font-bold text-white">Modificar Valor del Trámite</h3>
+        <button onclick="toggleModal('modal-editar-precio')" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <form onsubmit="actualizarPrecioTramite(event)" class="space-y-4">
+        <input type="hidden" id="edit-precio-id">
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Trámite ID / Cliente</label>
+          <p id="edit-precio-label" class="text-sm font-bold text-emerald-400 mb-3"></p>
+          <label class="block text-xs text-slate-300 font-medium mb-1">Nuevo Valor ($ COP)</label>
+          <input type="number" id="edit-nuevo-valor" required min="0" step="1000" placeholder="Ej: 1500000" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+        </div>
+        <div class="pt-2 flex justify-end space-x-2">
+          <button type="button" onclick="toggleModal('modal-editar-precio')" class="px-4 py-2 bg-slate-800 text-slate-300 text-xs font-medium rounded-lg hover:bg-slate-700">Cancelar</button>
+          <button type="submit" class="px-4 py-2 bg-emerald-600 text-white text-xs font-medium rounded-lg hover:bg-emerald-500 shadow-md shadow-emerald-600/30">Guardar Precio</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- MODAL: CAMBIAR ESTADO DE TRÁMITE -->
   <div id="modal-editar-estado" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
     <div class="bg-slate-900 border border-slate-700 rounded-xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
@@ -652,7 +727,7 @@
     </div>
   </div>
 
-  <!-- MODAL: NUEVO TRÁMITE -->
+  <!-- MODAL: NUEVO TRÁMITE CON CAMPO DE VALOR -->
   <div id="modal-nuevo-tramite" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
     <div class="bg-slate-900 border border-slate-700 rounded-xl max-w-md w-full p-6 space-y-4 shadow-2xl">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -667,9 +742,15 @@
           <input type="text" id="nuevo-cliente" required placeholder="Nombre de la empresa" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
         </div>
 
-        <div>
-          <label class="block text-xs text-slate-300 font-medium mb-1">Fecha de Inicio del Trámite</label>
-          <input type="date" id="nuevo-fecha" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-slate-300 font-medium mb-1">Fecha de Inicio</label>
+            <input type="date" id="nuevo-fecha" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+          </div>
+          <div>
+            <label class="block text-xs text-emerald-400 font-medium mb-1">Valor Trámite ($ COP)</label>
+            <input type="number" id="nuevo-valor" required min="0" step="1000" placeholder="Ej: 3500000" class="w-full bg-slate-950 border border-emerald-500/50 rounded-lg p-2 text-sm text-emerald-300 focus:outline-none focus:border-emerald-500">
+          </div>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
@@ -779,6 +860,7 @@
             <li><strong>RF-04:</strong> Módulo de generación e impresión de reportes ejecutivos en formato estándar.</li>
             <li><strong>RF-05:</strong> Autenticación con asignación de Roles y Permisos (RBAC) para Admin y Usuarios de Gestión.</li>
             <li><strong>RF-06:</strong> Simulación periódica y automatizada de Copias de Seguridad (Backups) exclusiva para Administrador.</li>
+            <li><strong>RF-07:</strong> Módulo de Control Financiero de Trámites con desglose individual de precios y restricción de edición por rol.</li>
           </ul>
         </div>
         <div>
@@ -801,13 +883,13 @@
     // ESTADO DE SESIÓN Y USUARIO ACTUAL
     let currentUser = null;
 
-    // DATA BASE POR DEFECTO
+    // DATA BASE POR DEFECTO CON VALORES EN PESOS ($ COP) POR TRÁMITE
     const defaultTramites = [
-      { id: 'LP-3059', fechaInicio: '2026-10-30', cliente: 'Jeronimo Martins', operacion: 'Importación', medio: 'Marítimo', pesoKg: 850, origenPais: 'Colombia', destinoPais: 'Colombia', estado: 'Pendiente' },
-      { id: 'LP-8921', fechaInicio: '2026-10-15', cliente: 'AeroTech Corp', operacion: 'Importación', medio: 'Marítimo', pesoKg: 12500, origenPais: 'Colombia', destinoPais: 'Venezuela', estado: 'Aprobado' },
-      { id: 'LP-8922', fechaInicio: '2026-10-22', cliente: 'Global Food Import', operacion: 'Despacho Aduanero', medio: 'Terrestre', pesoKg: 4200, origenPais: 'Colombia', destinoPais: 'Perú', estado: 'En Revisión' },
-      { id: 'LP-8923', fechaInicio: '2026-10-28', cliente: 'Industrias San José', operacion: 'Exportación', medio: 'Aéreo', pesoKg: 1850, origenPais: 'Colombia', destinoPais: 'Argentina', estado: 'Pendiente' },
-      { id: 'LP-8924', fechaInicio: '2026-10-29', cliente: 'TechLogistics SA', operacion: 'Tránsito Internacional', medio: 'Terrestre', pesoKg: 28000, origenPais: 'Colombia', destinoPais: 'Ecuador', estado: 'Aprobado' }
+      { id: 'LP-3059', fechaInicio: '2026-10-30', cliente: 'Jeronimo Martins', operacion: 'Importación', medio: 'Marítimo', pesoKg: 850, origenPais: 'Colombia', destinoPais: 'Colombia', estado: 'Pendiente', valorCop: 4200000 },
+      { id: 'LP-8921', fechaInicio: '2026-10-15', cliente: 'AeroTech Corp', operacion: 'Importación', medio: 'Marítimo', pesoKg: 12500, origenPais: 'Colombia', destinoPais: 'Venezuela', estado: 'Aprobado', valorCop: 18500000 },
+      { id: 'LP-8922', fechaInicio: '2026-10-22', cliente: 'Global Food Import', operacion: 'Despacho Aduanero', medio: 'Terrestre', pesoKg: 4200, origenPais: 'Colombia', destinoPais: 'Perú', estado: 'En Revisión', valorCop: 6800000 },
+      { id: 'LP-8923', fechaInicio: '2026-10-28', cliente: 'Industrias San José', operacion: 'Exportación', medio: 'Aéreo', pesoKg: 1850, origenPais: 'Colombia', destinoPais: 'Argentina', estado: 'Pendiente', valorCop: 9200000 },
+      { id: 'LP-8924', fechaInicio: '2026-10-29', cliente: 'TechLogistics SA', operacion: 'Tránsito Internacional', medio: 'Terrestre', pesoKg: 28000, origenPais: 'Colombia', destinoPais: 'Ecuador', estado: 'Aprobado', valorCop: 24000000 }
     ];
 
     // CARGAR DESDE LOCALSTORAGE O USAR VALORES POR DEFECTO
@@ -885,7 +967,9 @@
       });
 
       renderTramitesTable();
+      renderFinancieraTable();
       renderBackupsTable();
+      actualizarTotalesGlobales();
     }
 
     // SIMULACIÓN DE BACKUP AUTOMÁTICO PERIÓDICO
@@ -974,6 +1058,8 @@
           tramitesData = JSON.parse(backupEncontrado.snapshot);
           guardarEnLocalStorage();
           renderTramitesTable();
+          renderFinancieraTable();
+          actualizarTotalesGlobales();
           alert(`Sistema restaurado correctamente al punto de respaldo ${bkId}.`);
           switchTab('tramites');
         }
@@ -990,12 +1076,12 @@
         style: 'currency',
         currency: 'COP',
         maximumFractionDigits: 0
-      }).format(valor);
+      }).format(valor || 0);
     }
 
     // FORMATO NÚMEROS CON PUNTOS
     function formatearNumero(valor) {
-      return new Intl.NumberFormat('es-CO').format(valor);
+      return new Intl.NumberFormat('es-CO').format(valor || 0);
     }
 
     // TAB SWITCHING SYSTEM
@@ -1007,7 +1093,7 @@
 
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
       document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/20', 'bg-amber-600');
+        btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/20', 'bg-amber-600', 'bg-emerald-600');
         btn.classList.add('text-slate-400');
       });
 
@@ -1016,6 +1102,8 @@
       if (activeNav) {
         if (tabId === 'backups') {
           activeNav.classList.add('bg-amber-600', 'text-white', 'shadow-lg');
+        } else if (tabId === 'financiera') {
+          activeNav.classList.add('bg-emerald-600', 'text-white', 'shadow-lg');
         } else {
           activeNav.classList.add('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/20');
         }
@@ -1025,6 +1113,7 @@
       const titles = {
         'dashboard': 'Dashboard Operativo - Logistic Prime',
         'tramites': 'Gestión de Trámites Logísticos',
+        'financiera': 'Gestión Financiera - Valorización de Trámites',
         'bodegas': 'Control de Bodegas e Inventario por País',
         'cotizador': 'Calculadora de Envíos y Tarifas por Distancia',
         'reportes': 'Reportes Universitarios y Analytics',
@@ -1058,6 +1147,89 @@
       return item.tipo || 'N/A';
     }
 
+    // EDICIÓN DE PRECIO/VALOR DEL TRÁMITE (EXCLUSIVO ADMIN)
+    function abrirEditarPrecio(id) {
+      if (currentUser.role !== 'admin') {
+        alert('Acceso Denegado: Únicamente el Administrador puede modificar los precios de los trámites.');
+        return;
+      }
+      const item = tramitesData.find(t => t.id === id);
+      if (item) {
+        document.getElementById('edit-precio-id').value = item.id;
+        document.getElementById('edit-precio-label').innerText = `${item.id} - ${item.cliente}`;
+        document.getElementById('edit-nuevo-valor').value = item.valorCop || 0;
+        toggleModal('modal-editar-precio');
+      }
+    }
+
+    function actualizarPrecioTramite(e) {
+      e.preventDefault();
+      const id = document.getElementById('edit-precio-id').value;
+      const nuevoValor = parseFloat(document.getElementById('edit-nuevo-valor').value) || 0;
+
+      const item = tramitesData.find(t => t.id === id);
+      if (item) {
+        item.valorCop = nuevoValor;
+        guardarEnLocalStorage();
+        renderTramitesTable();
+        renderFinancieraTable();
+        actualizarTotalesGlobales();
+        toggleModal('modal-editar-precio');
+      }
+    }
+
+    // RENDER DE LA TABLA DE GESTIÓN FINANCIERA
+    function renderFinancieraTable() {
+      const tbody = document.getElementById('financiera-table-body');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      let totalAcumulado = 0;
+
+      tramitesData.forEach(item => {
+        const valor = item.valorCop || 0;
+        totalAcumulado += valor;
+
+        let badgeColor = 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+        if (item.estado === 'Aprobado') badgeColor = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+        if (item.estado === 'En Revisión') badgeColor = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+
+        const isAdmin = currentUser && currentUser.role === 'admin';
+
+        tbody.innerHTML += `
+          <tr class="hover:bg-slate-800/40 transition">
+            <td class="px-6 py-4 font-mono font-bold text-indigo-400">${item.id}</td>
+            <td class="px-6 py-4 font-medium text-white">${item.cliente}</td>
+            <td class="px-6 py-4 text-xs text-slate-300">${obtenerOperacionMedio(item)}</td>
+            <td class="px-6 py-4 text-xs font-medium text-indigo-300">${obtenerRuta(item)}</td>
+            <td class="px-6 py-4 font-bold text-emerald-400 font-mono">${formatearCOP(valor)}</td>
+            <td class="px-6 py-4">
+              <span class="px-2.5 py-0.5 rounded-full text-xs border ${badgeColor}">${item.estado}</span>
+            </td>
+            <td class="px-6 py-4 text-right">
+              ${isAdmin ? `
+                <button onclick="abrirEditarPrecio('${item.id}')" class="px-3 py-1 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white rounded text-xs font-medium transition border border-emerald-500/30">
+                  <i data-lucide="edit-3" class="w-3.5 h-3.5 inline mr-1"></i> Modificar Precio
+                </button>
+              ` : `
+                <span class="text-[11px] text-slate-500 italic">Solo Lectura</span>
+              `}
+            </td>
+          </tr>
+        `;
+      });
+
+      document.getElementById('total-financiero-resumen').innerText = formatearCOP(totalAcumulado);
+      lucide.createIcons();
+    }
+
+    function actualizarTotalesGlobales() {
+      let suma = 0;
+      tramitesData.forEach(t => suma += (t.valorCop || 0));
+      const el = document.getElementById('kpi-ingresos');
+      if (el) el.innerText = formatearCOP(suma);
+    }
+
     // EDICIÓN DE ESTADO DE TRÁMITE
     function abrirEditarEstado(id) {
       const item = tramitesData.find(t => t.id === id);
@@ -1079,11 +1251,12 @@
         item.estado = nuevoEstado;
         guardarEnLocalStorage();
         renderTramitesTable();
+        renderFinancieraTable();
         toggleModal('modal-editar-estado');
       }
     }
 
-    // RENDER TABLE CON BOTÓN DE EDICIÓN DE ESTADO HABILITADO
+    // RENDER TABLE TRÁMITES CON VALOR $ COP
     function renderTramitesTable() {
       const tbody = document.getElementById('tramites-table-body');
       tbody.innerHTML = '';
@@ -1102,6 +1275,7 @@
 
         const rutaTexto = obtenerRuta(item);
         const operacionTexto = obtenerOperacionMedio(item);
+        const isAdmin = currentUser && currentUser.role === 'admin';
 
         tbody.innerHTML += `
           <tr class="hover:bg-slate-800/30 transition">
@@ -1111,10 +1285,16 @@
             <td class="px-6 py-4 font-semibold text-slate-200">${operacionTexto}</td>
             <td class="px-6 py-4 font-semibold text-slate-200">${formatearNumero(item.pesoKg)} Kg</td>
             <td class="px-6 py-4 text-xs font-medium text-indigo-300">${rutaTexto}</td>
+            <td class="px-6 py-4 font-bold text-emerald-400 font-mono">${formatearCOP(item.valorCop)}</td>
             <td class="px-6 py-4">
               <span class="px-2.5 py-1 rounded-full text-xs border ${badgeColor}">${item.estado}</span>
             </td>
             <td class="px-6 py-4 text-right space-x-2">
+              ${isAdmin ? `
+                <button onclick="abrirEditarPrecio('${item.id}')" class="text-emerald-400 hover:text-emerald-300 transition" title="Editar Valor Financiero">
+                  <i data-lucide="dollar-sign" class="w-4 h-4 inline"></i>
+                </button>
+              ` : ''}
               <button onclick="abrirEditarEstado('${item.id}')" class="text-slate-400 hover:text-indigo-400 transition" title="Cambiar Estado">
                 <i data-lucide="edit-3" class="w-4 h-4 inline"></i>
               </button>
@@ -1122,15 +1302,14 @@
                 <button onclick="eliminarTramite('${item.id}')" class="text-slate-400 hover:text-red-400 transition" title="Eliminar Registro">
                   <i data-lucide="trash-2" class="w-4 h-4 inline"></i>
                 </button>
-              ` : `
-                <span class="text-[11px] text-slate-600 italic select-none" title="Bloqueado por Permisos"></span>
-              `}
+              ` : ''}
             </td>
           </tr>
         `;
       });
       lucide.createIcons();
       document.getElementById('kpi-tramites-count').innerText = tramitesData.length;
+      actualizarTotalesGlobales();
     }
 
     // FILTRADO INTELIGENTE
@@ -1173,6 +1352,7 @@
 
         const rutaTexto = obtenerRuta(item);
         const operacionTexto = obtenerOperacionMedio(item);
+        const isAdmin = currentUser && currentUser.role === 'admin';
 
         tbody.innerHTML += `
           <tr class="hover:bg-slate-800/30 transition">
@@ -1182,10 +1362,16 @@
             <td class="px-6 py-4 font-semibold text-slate-200">${operacionTexto}</td>
             <td class="px-6 py-4 font-semibold text-slate-200">${formatearNumero(item.pesoKg)} Kg</td>
             <td class="px-6 py-4 text-xs font-medium text-indigo-300">${rutaTexto}</td>
+            <td class="px-6 py-4 font-bold text-emerald-400 font-mono">${formatearCOP(item.valorCop)}</td>
             <td class="px-6 py-4">
               <span class="px-2.5 py-1 rounded-full text-xs border ${badgeColor}">${item.estado}</span>
             </td>
             <td class="px-6 py-4 text-right space-x-2">
+              ${isAdmin ? `
+                <button onclick="abrirEditarPrecio('${item.id}')" class="text-emerald-400 hover:text-emerald-300 transition" title="Editar Valor Financiero">
+                  <i data-lucide="dollar-sign" class="w-4 h-4 inline"></i>
+                </button>
+              ` : ''}
               <button onclick="abrirEditarEstado('${item.id}')" class="text-slate-400 hover:text-indigo-400 transition" title="Cambiar Estado">
                 <i data-lucide="edit-3" class="w-4 h-4 inline"></i>
               </button>
@@ -1193,9 +1379,7 @@
                 <button onclick="eliminarTramite('${item.id}')" class="text-slate-400 hover:text-red-400 transition">
                   <i data-lucide="trash-2" class="w-4 h-4 inline"></i>
                 </button>
-              ` : `
-                <span class="text-[11px] text-slate-600 italic select-none"></span>
-              `}
+              ` : ''}
             </td>
           </tr>
         `;
@@ -1203,7 +1387,7 @@
       lucide.createIcons();
     }
 
-    // GUARDAR NUEVO TRÁMITE
+    // GUARDAR NUEVO TRÁMITE CON VALOR FINANCIERO
     function guardarTramite(e) {
       e.preventDefault();
       const newId = 'LP-' + Math.floor(1000 + Math.random() * 9000);
@@ -1215,6 +1399,7 @@
         fechaVal = hoy.getFullYear() + '-' + String(hoy.getMonth() + 1).padStart(2, '0') + '-' + String(hoy.getDate()).padStart(2, '0');
       }
 
+      const valorCop = parseFloat(document.getElementById('nuevo-valor').value) || 0;
       const operacion = document.getElementById('nuevo-operacion').value;
       const medio = document.getElementById('nuevo-medio').value;
       const origenPais = document.getElementById('nuevo-origen-pais').value;
@@ -1231,11 +1416,14 @@
         pesoKg: pesoKg, 
         origenPais: origenPais,
         destinoPais: destinoPais,
-        estado: estado 
+        estado: estado,
+        valorCop: valorCop
       });
 
       guardarEnLocalStorage();
       renderTramitesTable();
+      renderFinancieraTable();
+      actualizarTotalesGlobales();
       toggleModal('modal-nuevo-tramite');
       e.target.reset();
     }
@@ -1246,6 +1434,8 @@
         tramitesData = tramitesData.filter(t => t.id !== id);
         guardarEnLocalStorage();
         renderTramitesTable();
+        renderFinancieraTable();
+        actualizarTotalesGlobales();
       }
     }
 

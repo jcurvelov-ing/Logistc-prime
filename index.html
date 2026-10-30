@@ -50,7 +50,46 @@
 </head>
 <body class="h-full text-slate-100 bg-slate-900 font-sans antialiased overflow-x-hidden">
 
-  <div class="min-h-full flex flex-col md:flex-row">
+  <!-- VISTA DE LOGIN -->
+  <div id="login-view" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950 p-4">
+    <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl relative overflow-hidden">
+      <div class="absolute -top-10 -right-10 w-32 h-32 bg-indigo-600/20 rounded-full blur-2xl"></div>
+      
+      <div class="text-center mb-8">
+        <div class="inline-flex p-3 bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-500/30 mb-3">
+          <i data-lucide="truck" class="w-8 h-8 text-white"></i>
+        </div>
+        <h1 class="text-2xl font-bold text-white tracking-wide">LOGISTIC<span class="text-indigo-400">PRIME</span></h1>
+        <p class="text-xs text-slate-400 mt-1">SaaS de Gestión Logística - Universidad de Cartagena</p>
+      </div>
+
+      <div id="login-error" class="hidden mb-4 p-3 bg-red-500/10 border border-red-500/30 text-red-400 text-xs rounded-lg text-center">
+        Usuario o contraseña incorrectos.
+      </div>
+
+      <form onsubmit="handleLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Usuario</label>
+          <input type="text" id="login-user" required placeholder="admin o usuario" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Contraseña</label>
+          <input type="password" id="login-pass" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+        </div>
+        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-lg transition shadow-lg shadow-indigo-600/30 text-sm">
+          Iniciar Sesión
+        </button>
+      </form>
+
+      <div class="mt-6 pt-4 border-t border-slate-800/80 text-xs text-slate-500 text-center space-y-1">
+        <p><span class="font-semibold text-slate-400">Admin:</span> admin / admin</p>
+        <p><span class="font-semibold text-slate-400">Usuario Operativo:</span> usuario / usuario</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- APLICACIÓN PRINCIPAL -->
+  <div id="app-view" class="hidden min-h-full flex flex-col md:flex-row">
     
     <!-- SIDEBAR -->
     <aside class="w-full md:w-64 bg-slate-950 border-r border-slate-800 flex-shrink-0 flex flex-col justify-between">
@@ -65,7 +104,6 @@
             <p class="text-xs text-slate-400">Enterprise SaaS v2.4</p>
           </div>
         </div>
-
         <!-- Navigation Menu -->
         <nav class="p-4 space-y-1">
           <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-all bg-indigo-600 text-white shadow-lg shadow-indigo-600/20">
@@ -90,7 +128,6 @@
           </button>
         </nav>
       </div>
-
       <!-- Academic Project Footer -->
       <div class="p-4 border-t border-slate-800 bg-slate-950/50">
         <div class="p-3 bg-slate-900 border border-slate-800 rounded-lg">
@@ -118,36 +155,39 @@
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span> Sistema Activo
           </span>
         </div>
-
         <div class="flex items-center space-x-4">
           <button onclick="toggleModal('ficha-modal')" class="hidden sm:flex items-center space-x-2 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-3 py-2 rounded-lg transition">
             <i data-lucide="book-open" class="w-4 h-4 text-indigo-400"></i>
             <span>Documentación Requerimientos</span>
           </button>
+          
+          <!-- PERFIL Y CERRAR SESIÓN -->
           <div class="flex items-center space-x-3 border-l border-slate-800 pl-4">
-            <div class="w-9 h-9 rounded-full bg-indigo-600/30 border border-indigo-500/40 flex items-center justify-center font-bold text-indigo-300 text-sm">
+            <div id="user-avatar" class="w-9 h-9 rounded-full bg-indigo-600/30 border border-indigo-500/40 flex items-center justify-center font-bold text-indigo-300 text-sm">
               LP
             </div>
             <div class="hidden md:block text-left">
-              <p class="text-xs font-semibold text-white">Ingeniería SW</p>
-              <p class="text-[10px] text-slate-400">Admin - Logistic Prime</p>
+              <p id="user-display-name" class="text-xs font-semibold text-white">Ingeniería SW</p>
+              <p id="user-role-badge" class="text-[10px] text-slate-400">Admin - Logistic Prime</p>
             </div>
+            <button onclick="handleLogout()" class="ml-2 p-2 text-slate-400 hover:text-red-400 hover:bg-slate-800 rounded-lg transition" title="Cerrar Sesión">
+              <i data-lucide="log-out" class="w-4 h-4"></i>
+            </button>
           </div>
         </div>
       </header>
 
       <!-- TAB CONTENTS CONTAINER -->
       <div class="p-6 space-y-6">
-
+        
         <!-- SECTION: DASHBOARD -->
         <section id="tab-dashboard" class="tab-content space-y-6">
-          <!-- Metrics Cards -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-5 relative overflow-hidden">
               <div class="flex justify-between items-start">
                 <div>
                   <p class="text-xs text-slate-400 font-medium">Trámites Activos</p>
-                  <h3 class="text-2xl font-bold text-white mt-1" id="kpi-tramites-count">128</h3>
+                  <h3 class="text-2xl font-bold text-white mt-1" id="kpi-tramites-count">4</h3>
                 </div>
                 <div class="p-2 bg-indigo-500/10 rounded-lg border border-indigo-500/20 text-indigo-400">
                   <i data-lucide="file-check-2" class="w-5 h-5"></i>
@@ -157,8 +197,6 @@
                 <i data-lucide="trending-up" class="w-3.5 h-3.5 mr-1"></i> +12% respecto a la semana anterior
               </p>
             </div>
-
-            <!-- Card de Capacidad Ocupada Actualizada -->
             <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-5 relative overflow-hidden">
               <div class="flex justify-between items-start">
                 <div>
@@ -173,7 +211,6 @@
                 <i data-lucide="alert-circle" class="w-3.5 h-3.5 mr-1"></i> 78% de 9.600.000 m³ totales (Triple Capacidad)
               </p>
             </div>
-
             <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-5 relative overflow-hidden">
               <div class="flex justify-between items-start">
                 <div>
@@ -188,7 +225,6 @@
                 <i data-lucide="check-circle" class="w-3.5 h-3.5 mr-1"></i> 99.1% entregas a tiempo
               </p>
             </div>
-
             <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-5 relative overflow-hidden">
               <div class="flex justify-between items-start">
                 <div>
@@ -204,8 +240,6 @@
               </p>
             </div>
           </div>
-
-          <!-- Charts Row -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5">
               <div class="flex justify-between items-center mb-4">
@@ -218,7 +252,6 @@
                 <canvas id="chart-tramites"></canvas>
               </div>
             </div>
-
             <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5">
               <div class="flex justify-between items-center mb-4">
                 <h3 class="text-sm font-semibold text-white flex items-center">
@@ -245,8 +278,6 @@
               <span>Nuevo Trámite</span>
             </button>
           </div>
-
-          <!-- Table Filter & Search -->
           <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl overflow-hidden">
             <div class="p-4 border-b border-slate-700/60 flex flex-col sm:flex-row gap-3 justify-between">
               <div class="relative flex-1 max-w-md">
@@ -263,8 +294,6 @@
                 </select>
               </div>
             </div>
-
-            <!-- Table con columna Peso (Kg) -->
             <div class="overflow-x-auto">
               <table class="w-full text-left text-sm text-slate-300">
                 <thead class="bg-slate-900/60 text-xs uppercase text-slate-400 border-b border-slate-700/60">
@@ -286,11 +315,9 @@
           </div>
         </section>
 
-        <!-- SECTION: BODEGAS E INVENTARIO (ACTUALIZADO A BODEGAS POR PAÍS) -->
+        <!-- SECTION: BODEGAS -->
         <section id="tab-bodegas" class="tab-content space-y-6 hidden">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
-            <!-- Bodega Colombia (Triple de Capacidad: 9,600,000 m³) -->
             <div class="bg-slate-800/40 border border-indigo-500/40 rounded-xl p-5 space-y-4 relative">
               <div class="flex justify-between items-start">
                 <div>
@@ -316,8 +343,6 @@
                 <li>• Zonas de Carga: 3 Mega-Terminales</li>
               </ul>
             </div>
-
-            <!-- Bodega Ecuador (3,200,000 m³) -->
             <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 space-y-4">
               <div class="flex justify-between items-start">
                 <div>
@@ -343,8 +368,6 @@
                 <li>• Bahías Activas: 24 Módulos</li>
               </ul>
             </div>
-
-            <!-- Bodega Venezuela (3,200,000 m³) -->
             <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 space-y-4">
               <div class="flex justify-between items-start">
                 <div>
@@ -370,8 +393,6 @@
                 <li>• Bahías Activas: 18 Módulos</li>
               </ul>
             </div>
-
-            <!-- Bodega Argentina (3,200,000 m³) -->
             <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 space-y-4">
               <div class="flex justify-between items-start">
                 <div>
@@ -397,8 +418,6 @@
                 <li>• Bahías Activas: 15 Módulos</li>
               </ul>
             </div>
-
-            <!-- Bodega Estados Unidos (3,200,000 m³) -->
             <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 space-y-4">
               <div class="flex justify-between items-start">
                 <div>
@@ -424,8 +443,6 @@
                 <li>• Bahías Activas: 30 Módulos</li>
               </ul>
             </div>
-
-            <!-- Bodega México (3,200,000 m³) -->
             <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5 space-y-4">
               <div class="flex justify-between items-start">
                 <div>
@@ -451,19 +468,15 @@
                 <li>• Bahías Activas: 20 Módulos</li>
               </ul>
             </div>
-
           </div>
         </section>
 
-        <!-- SECTION: CALCULADORA DE DESPACHOS AMÉRICA -->
+        <!-- SECTION: CALCULADORA -->
         <section id="tab-cotizador" class="tab-content space-y-6 hidden">
           <div class="max-w-2xl mx-auto bg-slate-800/40 border border-slate-700/60 rounded-xl p-6">
             <h3 class="text-lg font-bold text-white mb-1">Calculadora de Tarifas por Distancia - América</h3>
             <p class="text-xs text-slate-400 mb-6">Cotizador dinámico desde Colombia hacia 11 destinos clave en el continente americano.</p>
-
             <form id="calc-form" onsubmit="calcularCosto(event)" class="space-y-4">
-              
-              <!-- Fila: Origen y Destino -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label class="block text-xs text-slate-300 font-medium mb-1">País de Origen</label>
@@ -486,8 +499,6 @@
                   </select>
                 </div>
               </div>
-
-              <!-- Fila: Tipo Transporte y Peso -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label class="block text-xs text-slate-300 font-medium mb-1">Modo de Transporte</label>
@@ -502,8 +513,6 @@
                   <input type="number" id="calc-peso" required min="1" placeholder="Ej: 200" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
                 </div>
               </div>
-
-              <!-- Fila: Volumen y Seguro -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label class="block text-xs text-slate-300 font-medium mb-1">Volumen (M³)</label>
@@ -518,12 +527,10 @@
                   </select>
                 </div>
               </div>
-
               <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-lg transition shadow-lg shadow-indigo-600/30">
                 Calcular Costo Estimado
               </button>
             </form>
-
             <div id="calc-result" class="mt-6 p-4 bg-indigo-950/40 border border-indigo-500/30 rounded-lg hidden">
               <p class="text-xs text-indigo-300 uppercase tracking-wider font-semibold">Estimación de Costo Final</p>
               <h4 class="text-2xl font-bold text-white mt-1" id="calc-total">$ 0 COP</h4>
@@ -537,7 +544,6 @@
           <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-6">
             <h3 class="text-lg font-bold text-white mb-2">Generador de Reportes Universitarios</h3>
             <p class="text-xs text-slate-400 mb-4">Exporta la información operativa de Logistic Prime para entregables académicos.</p>
-            
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <button onclick="descargarSimulacion('KPIs Operativos')" class="p-4 bg-slate-900 border border-slate-700 rounded-lg text-left hover:border-indigo-500 transition">
                 <i data-lucide="file-spread-sheet" class="w-6 h-6 text-indigo-400 mb-2"></i>
@@ -571,7 +577,6 @@
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
-
       <form onsubmit="guardarTramite(event)" class="space-y-3">
         <div>
           <label class="block text-xs text-slate-300 font-medium mb-1">Cliente</label>
@@ -631,7 +636,6 @@
             Diseñar e implementar una plataforma centralizada tipo SaaS para la empresa <strong>Logistic Prime</strong>, orientada a la optimización de trámites aduaneros, monitoreo de capacidad en bodegas y estimación automática de costos operativos.
           </p>
         </div>
-
         <div>
           <h4 class="font-bold text-indigo-400 uppercase text-xs tracking-wider mb-2">2. Requerimientos Funcionales (RF)</h4>
           <ul class="list-disc list-inside text-xs space-y-1 text-slate-300">
@@ -639,9 +643,9 @@
             <li><strong>RF-02:</strong> Visualización de métricas de ocupación y volumen en M3 de las bodegas operativas.</li>
             <li><strong>RF-03:</strong> Módulo de cálculo automático de tarifas según distancia geográfica, modalidad (aéreo, marítimo, terrestre), peso y volumen.</li>
             <li><strong>RF-04:</strong> Módulo de generación e impresión de reportes ejecutivos en formato estándar.</li>
+            <li><strong>RF-05:</strong> Autenticación con asignación de Roles y Permisos (RBAC) para Admin y Usuarios de Gestión.</li>
           </ul>
         </div>
-
         <div>
           <h4 class="font-bold text-indigo-400 uppercase text-xs tracking-wider mb-2">3. Requerimientos No Funcionales (RNF)</h4>
           <ul class="list-disc list-inside text-xs space-y-1 text-slate-300">
@@ -659,6 +663,9 @@
 
   <!-- JAVASCRIPT LOGIC -->
   <script>
+    // ESTADO DE SESIÓN Y USUARIO ACTUAL
+    let currentUser = null;
+
     // DATA INICIAL CON CAMPO PESO KG
     let tramitesData = [
       { id: 'LP-8921', cliente: 'AeroTech Corp', tipo: 'Importación Marítima', pesoKg: 12500, origen: 'Colombia -> Venezuela', estado: 'Aprobado' },
@@ -667,7 +674,64 @@
       { id: 'LP-8924', cliente: 'TechLogistics SA', tipo: 'Tránsito Terrestre', pesoKg: 28000, origen: 'Colombia -> Ecuador', estado: 'Aprobado' }
     ];
 
-    // FORMATO MONEDA COLOMBIANA (COP con Puntos)
+    // INICIALIZACIÓN
+    window.onload = function() {
+      lucide.createIcons();
+      initCharts();
+      checkSession();
+    };
+
+    // CONTROL DE AUTENTICACIÓN
+    function handleLogin(e) {
+      e.preventDefault();
+      const u = document.getElementById('login-user').value.trim();
+      const p = document.getElementById('login-pass').value.trim();
+
+      if (u === 'admin' && p === 'admin') {
+        currentUser = { user: 'admin', role: 'admin', name: 'Administrador SW' };
+      } else if (u === 'usuario' && p === 'usuario') {
+        currentUser = { user: 'usuario', role: 'usuario', name: 'Gestor Operativo' };
+      } else {
+        document.getElementById('login-error').classList.remove('hidden');
+        return;
+      }
+
+      localStorage.setItem('logistic_user', JSON.stringify(currentUser));
+      document.getElementById('login-error').classList.add('hidden');
+      applyUserPermissions();
+    }
+
+    function checkSession() {
+      const savedUser = localStorage.getItem('logistic_user');
+      if (savedUser) {
+        currentUser = JSON.parse(savedUser);
+        applyUserPermissions();
+      } else {
+        document.getElementById('login-view').classList.remove('hidden');
+        document.getElementById('app-view').classList.add('hidden');
+      }
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('logistic_user');
+      currentUser = null;
+      document.getElementById('login-view').classList.remove('hidden');
+      document.getElementById('app-view').classList.add('hidden');
+    }
+
+    // APLICAR PERMISOS DE ROL (RBAC)
+    function applyUserPermissions() {
+      document.getElementById('login-view').classList.add('hidden');
+      document.getElementById('app-view').classList.remove('hidden');
+
+      document.getElementById('user-display-name').textContent = currentUser.name;
+      document.getElementById('user-avatar').textContent = currentUser.role === 'admin' ? 'AD' : 'US';
+      document.getElementById('user-role-badge').textContent = currentUser.role === 'admin' ? 'Admin - Logistic Prime' : 'Gestor - Permisos Limitados';
+
+      renderTramitesTable();
+    }
+
+    // FORMATO MONEDA COLOMBIANA
     function formatearCOP(valor) {
       return new Intl.NumberFormat('es-CO', {
         style: 'currency',
@@ -676,17 +740,10 @@
       }).format(valor);
     }
 
-    // FORMATO NÚMEROS CON PUNTOS PARA KILOS Y M3
+    // FORMATO NÚMEROS CON PUNTOS
     function formatearNumero(valor) {
       return new Intl.NumberFormat('es-CO').format(valor);
     }
-
-    // INITIALIZATION
-    window.onload = function() {
-      lucide.createIcons();
-      renderTramitesTable();
-      initCharts();
-    };
 
     // TAB SWITCHING SYSTEM
     function switchTab(tabId) {
@@ -695,13 +752,11 @@
         btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/20');
         btn.classList.add('text-slate-400');
       });
-
       document.getElementById('tab-' + tabId).classList.remove('hidden');
       const activeNav = document.getElementById('nav-' + tabId);
       activeNav.classList.add('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/20');
       activeNav.classList.remove('text-slate-400');
-
-      // Update Header Title
+      
       const titles = {
         'dashboard': 'Dashboard Operativo - Logistic Prime',
         'tramites': 'Gestión de Trámites Logísticos',
@@ -718,15 +773,23 @@
       modal.classList.toggle('hidden');
     }
 
-    // RENDER TABLE
+    // RENDER TABLE CON PERMISOS DINÁMICOS
     function renderTramitesTable() {
       const tbody = document.getElementById('tramites-table-body');
       tbody.innerHTML = '';
-
+      
       tramitesData.forEach(item => {
         let badgeColor = 'bg-amber-500/10 text-amber-400 border-amber-500/20';
         if (item.estado === 'Aprobado') badgeColor = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
         if (item.estado === 'En Revisión') badgeColor = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+
+        // LÓGICA DE RESTRICCIÓN DE ELIMINACIÓN
+        let canDelete = false;
+        if (currentUser && currentUser.role === 'admin') {
+          canDelete = true;
+        } else if (currentUser && currentUser.role === 'usuario' && item.estado === 'Pendiente') {
+          canDelete = true;
+        }
 
         tbody.innerHTML += `
           <tr class="hover:bg-slate-800/30 transition">
@@ -739,9 +802,13 @@
               <span class="px-2.5 py-1 rounded-full text-xs border ${badgeColor}">${item.estado}</span>
             </td>
             <td class="px-6 py-4 text-right">
-              <button onclick="eliminarTramite('${item.id}')" class="text-slate-400 hover:text-red-400 transition">
-                <i data-lucide="trash-2" class="w-4 h-4"></i>
-              </button>
+              ${canDelete ? `
+                <button onclick="eliminarTramite('${item.id}')" class="text-slate-400 hover:text-red-400 transition" title="Eliminar Registro">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+              ` : `
+                <span class="text-[11px] text-slate-600 italic select-none" title="Los usuarios estándar no pueden eliminar trámites en revisión o aprobados">Bloqueado</span>
+              `}
             </td>
           </tr>
         `;
@@ -754,19 +821,25 @@
     function filterTramites() {
       const search = document.getElementById('search-tramites').value.toLowerCase();
       const estado = document.getElementById('filter-estado').value;
-
       const filtered = tramitesData.filter(t => {
         const matchesSearch = t.cliente.toLowerCase().includes(search) || t.id.toLowerCase().includes(search) || t.tipo.toLowerCase().includes(search);
         const matchesEstado = estado === 'todos' || t.estado === estado;
         return matchesSearch && matchesEstado;
       });
-
+      
       const tbody = document.getElementById('tramites-table-body');
       tbody.innerHTML = '';
       filtered.forEach(item => {
         let badgeColor = 'bg-amber-500/10 text-amber-400 border-amber-500/20';
         if (item.estado === 'Aprobado') badgeColor = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
         if (item.estado === 'En Revisión') badgeColor = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+
+        let canDelete = false;
+        if (currentUser && currentUser.role === 'admin') {
+          canDelete = true;
+        } else if (currentUser && currentUser.role === 'usuario' && item.estado === 'Pendiente') {
+          canDelete = true;
+        }
 
         tbody.innerHTML += `
           <tr class="hover:bg-slate-800/30 transition">
@@ -779,9 +852,13 @@
               <span class="px-2.5 py-1 rounded-full text-xs border ${badgeColor}">${item.estado}</span>
             </td>
             <td class="px-6 py-4 text-right">
-              <button onclick="eliminarTramite('${item.id}')" class="text-slate-400 hover:text-red-400 transition">
-                <i data-lucide="trash-2" class="w-4 h-4"></i>
-              </button>
+              ${canDelete ? `
+                <button onclick="eliminarTramite('${item.id}')" class="text-slate-400 hover:text-red-400 transition">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+              ` : `
+                <span class="text-[11px] text-slate-600 italic select-none">Bloqueado</span>
+              `}
             </td>
           </tr>
         `;
@@ -798,7 +875,7 @@
       const pesoKg = parseFloat(document.getElementById('nuevo-peso').value) || 0;
       const origen = document.getElementById('nuevo-origen').value;
       const estado = document.getElementById('nuevo-estado').value;
-
+      
       tramitesData.unshift({ id: newId, cliente, tipo, pesoKg, origen, estado });
       renderTramitesTable();
       toggleModal('modal-nuevo-tramite');
@@ -807,8 +884,10 @@
 
     // DELETE TRAMITE
     function eliminarTramite(id) {
-      tramitesData = tramitesData.filter(t => t.id !== id);
-      renderTramitesTable();
+      if (confirm(`¿Confirma que desea eliminar el registro ${id}?`)) {
+        tramitesData = tramitesData.filter(t => t.id !== id);
+        renderTramitesTable();
+      }
     }
 
     // CALCULATOR LOGIC
@@ -820,7 +899,7 @@
       const peso = parseFloat(document.getElementById('calc-peso').value);
       const volumen = parseFloat(document.getElementById('calc-volumen').value);
       const seguroRate = parseFloat(document.getElementById('calc-seguro').value);
-
+      
       const tarifasPorPais = {
         'venezuela': { aereo: 120000, maritimo: 30000, terrestre: 18000, nombre: 'Venezuela', dias: '2 - 4 días' },
         'ecuador':   { aereo: 120000, maritimo: 30000, terrestre: 18000, nombre: 'Ecuador', dias: '2 - 3 días' },
@@ -837,11 +916,9 @@
 
       const infoPais = tarifasPorPais[destino] || tarifasPorPais['venezuela'];
       let tarifaKilo = infoPais[tipo] || infoPais['aereo'];
-
       const costoPeso = peso * tarifaKilo;
       const costoVolumen = volumen * 120000;
       const subtotal = costoPeso + costoVolumen;
-
       const seguro = subtotal * seguroRate;
       const total = subtotal + seguro;
 

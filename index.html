@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Logistic Prime - Gestión Logística Colombiana</title>
+  <title>Logistic Prime - SaaS de Gestión Logística</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Chart.js CDN -->
@@ -198,7 +198,7 @@
               <div class="flex justify-between items-start">
                 <div>
                   <p class="text-xs text-slate-400 font-medium">Trámites Activos</p>
-                  <h3 class="text-2xl font-bold text-white mt-1" id="kpi-tramites-count">4</h3>
+                  <h3 class="text-2xl font-bold text-white mt-1" id="kpi-tramites-count">5</h3>
                 </div>
                 <div class="p-2 bg-indigo-500/10 rounded-lg border border-indigo-500/20 text-indigo-400">
                   <i data-lucide="file-check-2" class="w-5 h-5"></i>
@@ -293,7 +293,7 @@
             <div class="p-4 border-b border-slate-700/60 flex flex-col sm:flex-row gap-3 justify-between">
               <div class="relative flex-1 max-w-md">
                 <i data-lucide="search" class="w-4 h-4 absolute left-3 top-3 text-slate-400"></i>
-                <input type="text" id="search-tramites" onkeyup="filterTramites()" placeholder="Buscar por código, cliente o trámite..." class="w-full bg-slate-900 border border-slate-700 rounded-lg pl-9 pr-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                <input type="text" id="search-tramites" onkeyup="filterTramites()" placeholder="Buscar por cliente, país (Ej: Argentina), medio, código..." class="w-full bg-slate-900 border border-slate-700 rounded-lg pl-9 pr-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
               </div>
               <div class="flex items-center space-x-2">
                 <label class="text-xs text-slate-400">Estado:</label>
@@ -312,7 +312,7 @@
                     <th class="px-6 py-3">Código</th>
                     <th class="px-6 py-3">Fecha Inicio</th>
                     <th class="px-6 py-3">Cliente</th>
-                    <th class="px-6 py-3">Tipo de Trámite</th>
+                    <th class="px-6 py-3">Operación / Medio</th>
                     <th class="px-6 py-3">Peso (Kg)</th>
                     <th class="px-6 py-3">Origen / Destino</th>
                     <th class="px-6 py-3">Estado</th>
@@ -622,7 +622,7 @@
     </main>
   </div>
 
-  <!-- MODAL: NUEVO TRÁMITE CON CAMPO DE FECHA INICIO -->
+  <!-- MODAL: NUEVO TRÁMITE CON SEPARACIÓN DE OPERACIÓN Y MEDIO DE TRANSPORTE -->
   <div id="modal-nuevo-tramite" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
     <div class="bg-slate-900 border border-slate-700 rounded-xl max-w-md w-full p-6 space-y-4 shadow-2xl">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -634,42 +634,85 @@
       <form onsubmit="guardarTramite(event)" class="space-y-3">
         <div>
           <label class="block text-xs text-slate-300 font-medium mb-1">Cliente</label>
-          <input type="text" id="nuevo-cliente" required placeholder="Nombre de la empresa" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200">
+          <input type="text" id="nuevo-cliente" required placeholder="Nombre de la empresa" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
         </div>
 
         <div>
           <label class="block text-xs text-slate-300 font-medium mb-1">Fecha de Inicio del Trámite</label>
-          <input type="date" id="nuevo-fecha" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200">
+          <input type="date" id="nuevo-fecha" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs text-slate-300 font-medium mb-1">Tipo de Trámite</label>
-            <select id="nuevo-tipo" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200">
-              <option value="Importación Marítima">Importación Marítima</option>
-              <option value="Exportacion Marítima">Exportación Marítima</option>
-              <option value="Exportación Aérea">Exportación Aérea</option>
+            <label class="block text-xs text-slate-300 font-medium mb-1">Tipo de Operación</label>
+            <select id="nuevo-operacion" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+              <option value="Importación">Importación</option>
+              <option value="Exportación">Exportación</option>
               <option value="Despacho Aduanero">Despacho Aduanero</option>
-              <option value="Tránsito Terrestre">Tránsito Terrestre</option>
+              <option value="Tránsito Internacional">Tránsito Internacional</option>
             </select>
           </div>
           <div>
-            <label class="block text-xs text-slate-300 font-medium mb-1">Peso (Kg)</label>
-            <input type="number" id="nuevo-peso" required min="1" placeholder="Ej: 12500" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200">
+            <label class="block text-xs text-slate-300 font-medium mb-1">Medio de Transporte</label>
+            <select id="nuevo-medio" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+              <option value="Marítimo">Marítimo</option>
+              <option value="Aéreo">Aéreo</option>
+              <option value="Terrestre">Terrestre</option>
+              <option value="Multimodal">Multimodal</option>
+            </select>
           </div>
         </div>
-        <div>
-          <label class="block text-xs text-slate-300 font-medium mb-1">Origen / Destino</label>
-          <input type="text" id="nuevo-origen" required placeholder="Ej: Colombia -> Argentina" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200">
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-slate-300 font-medium mb-1">País de Origen</label>
+            <select id="nuevo-origen-pais" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+              <option value="Colombia">Colombia</option>
+              <option value="Argentina">Argentina</option>
+              <option value="Brasil">Brasil</option>
+              <option value="Canadá">Canadá</option>
+              <option value="Chile">Chile</option>
+              <option value="Ecuador">Ecuador</option>
+              <option value="Estados Unidos">Estados Unidos</option>
+              <option value="México">México</option>
+              <option value="Panamá">Panamá</option>
+              <option value="Perú">Perú</option>
+              <option value="Venezuela">Venezuela</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-300 font-medium mb-1">País de Destino</label>
+            <select id="nuevo-destino-pais" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+              <option value="Argentina">Argentina</option>
+              <option value="Brasil">Brasil</option>
+              <option value="Canadá">Canadá</option>
+              <option value="Chile">Chile</option>
+              <option value="Colombia">Colombia</option>
+              <option value="Ecuador">Ecuador</option>
+              <option value="Estados Unidos">Estados Unidos</option>
+              <option value="México">México</option>
+              <option value="Panamá">Panamá</option>
+              <option value="Perú">Perú</option>
+              <option value="Venezuela">Venezuela</option>
+            </select>
+          </div>
         </div>
-        <div>
-          <label class="block text-xs text-slate-300 font-medium mb-1">Estado Inicial</label>
-          <select id="nuevo-estado" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200">
-            <option value="Pendiente">Pendiente</option>
-            <option value="En Revisión">En Revisión</option>
-            <option value="Aprobado">Aprobado</option>
-          </select>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-slate-300 font-medium mb-1">Peso (Kg)</label>
+            <input type="number" id="nuevo-peso" required min="1" placeholder="Ej: 12500" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+          </div>
+          <div>
+            <label class="block text-xs text-slate-300 font-medium mb-1">Estado Inicial</label>
+            <select id="nuevo-estado" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+              <option value="Pendiente">Pendiente</option>
+              <option value="En Revisión">En Revisión</option>
+              <option value="Aprobado">Aprobado</option>
+            </select>
+          </div>
         </div>
+
         <div class="pt-3 flex justify-end space-x-2">
           <button type="button" onclick="toggleModal('modal-nuevo-tramite')" class="px-4 py-2 bg-slate-800 text-slate-300 text-xs font-medium rounded-lg hover:bg-slate-700">Cancelar</button>
           <button type="submit" class="px-4 py-2 bg-indigo-600 text-white text-xs font-medium rounded-lg hover:bg-indigo-500 shadow-md shadow-indigo-600/30">Guardar Registros</button>
@@ -700,9 +743,9 @@
         <div>
           <h4 class="font-bold text-indigo-400 uppercase text-xs tracking-wider mb-2">2. Requerimientos Funcionales (RF)</h4>
           <ul class="list-disc list-inside text-xs space-y-1 text-slate-300">
-            <li><strong>RF-01:</strong> Gestión en tiempo real del estado de trámites de aduana e importaciones/exportaciones con registro de fecha de inicio.</li>
+            <li><strong>RF-01:</strong> Gestión en tiempo real de trámites aduaneros clasificando Operación (Importación/Exportación) y Medio de Transporte.</li>
             <li><strong>RF-02:</strong> Visualización de métricas de ocupación y volumen en M3 de las bodegas operativas.</li>
-            <li><strong>RF-03:</strong> Módulo de cálculo automático de tarifas según distancia geográfica, modalidad (aéreo, marítimo, terrestre), peso y volumen.</li>
+            <li><strong>RF-03:</strong> Módulo de cálculo automático de tarifas según distancia geográfica, modalidad, peso y volumen.</li>
             <li><strong>RF-04:</strong> Módulo de generación e impresión de reportes ejecutivos en formato estándar.</li>
             <li><strong>RF-05:</strong> Autenticación con asignación de Roles y Permisos (RBAC) para Admin y Usuarios de Gestión.</li>
             <li><strong>RF-06:</strong> Simulación periódica y automatizada de Copias de Seguridad (Backups) exclusiva para Administrador.</li>
@@ -728,12 +771,13 @@
     // ESTADO DE SESIÓN Y USUARIO ACTUAL
     let currentUser = null;
 
-    // DATA INICIAL CON CAMPO PESO KG Y FECHA DE INICIO
+    // DATA INICIAL CON OPERACIÓN Y MEDIO DE TRANSPORTE ESTRUCTURADOS
     let tramitesData = [
-      { id: 'LP-8921', fechaInicio: '2026-10-15', cliente: 'AeroTech Corp', tipo: 'Importación Marítima', pesoKg: 12500, origen: 'Colombia -> Venezuela', estado: 'Aprobado' },
-      { id: 'LP-8922', fechaInicio: '2026-10-22', cliente: 'Global Food Import', tipo: 'Despacho Aduanero', pesoKg: 4200, origen: 'Colombia -> Perú', estado: 'En Revisión' },
-      { id: 'LP-8923', fechaInicio: '2026-10-28', cliente: 'Industrias San José', tipo: 'Exportación Aérea', pesoKg: 1850, origen: 'Colombia -> Argentina', estado: 'Pendiente' },
-      { id: 'LP-8924', fechaInicio: '2026-10-29', cliente: 'TechLogistics SA', tipo: 'Tránsito Terrestre', pesoKg: 28000, origen: 'Colombia -> Ecuador', estado: 'Aprobado' }
+      { id: 'LP-3059', fechaInicio: '2026-10-30', cliente: 'Jeronimo Martins', operacion: 'Importación', medio: 'Marítimo', pesoKg: 850, origenPais: 'Colombia', destinoPais: 'Colombia', estado: 'Pendiente' },
+      { id: 'LP-8921', fechaInicio: '2026-10-15', cliente: 'AeroTech Corp', operacion: 'Importación', medio: 'Marítimo', pesoKg: 12500, origenPais: 'Colombia', destinoPais: 'Venezuela', estado: 'Aprobado' },
+      { id: 'LP-8922', fechaInicio: '2026-10-22', cliente: 'Global Food Import', operacion: 'Despacho Aduanero', medio: 'Terrestre', pesoKg: 4200, origenPais: 'Colombia', destinoPais: 'Perú', estado: 'En Revisión' },
+      { id: 'LP-8923', fechaInicio: '2026-10-28', cliente: 'Industrias San José', operacion: 'Exportación', medio: 'Aéreo', pesoKg: 1850, origenPais: 'Colombia', destinoPais: 'Argentina', estado: 'Pendiente' },
+      { id: 'LP-8924', fechaInicio: '2026-10-29', cliente: 'TechLogistics SA', operacion: 'Tránsito Internacional', medio: 'Terrestre', pesoKg: 28000, origenPais: 'Colombia', destinoPais: 'Ecuador', estado: 'Aprobado' }
     ];
 
     // COPIAS DE SEGURIDAD SIMULADAS
@@ -957,7 +1001,26 @@
       modal.classList.toggle('hidden');
     }
 
-    // RENDER TABLE CON COLUMNA DE FECHA INICIO
+    // OBTENER TEXTO DE RUTA
+    function obtenerRuta(item) {
+      if (item.origenPais && item.destinoPais) {
+        if (item.origenPais.toLowerCase() === item.destinoPais.toLowerCase()) {
+          return item.origenPais;
+        }
+        return `${item.origenPais} -> ${item.destinoPais}`;
+      }
+      return item.origen || 'N/A';
+    }
+
+    // OBTENER OPERACIÓN Y MEDIO
+    function obtenerOperacionMedio(item) {
+      if (item.operacion && item.medio) {
+        return `${item.operacion} (${item.medio})`;
+      }
+      return item.tipo || 'N/A';
+    }
+
+    // RENDER TABLE
     function renderTramitesTable() {
       const tbody = document.getElementById('tramites-table-body');
       tbody.innerHTML = '';
@@ -974,14 +1037,17 @@
           canDelete = true;
         }
 
+        const rutaTexto = obtenerRuta(item);
+        const operacionTexto = obtenerOperacionMedio(item);
+
         tbody.innerHTML += `
           <tr class="hover:bg-slate-800/30 transition">
             <td class="px-6 py-4 font-mono font-bold text-indigo-400">${item.id}</td>
             <td class="px-6 py-4 text-xs font-medium text-slate-300">${item.fechaInicio || 'N/A'}</td>
             <td class="px-6 py-4 text-white font-medium">${item.cliente}</td>
-            <td class="px-6 py-4">${item.tipo}</td>
+            <td class="px-6 py-4 font-semibold text-slate-200">${operacionTexto}</td>
             <td class="px-6 py-4 font-semibold text-slate-200">${formatearNumero(item.pesoKg)} Kg</td>
-            <td class="px-6 py-4 text-xs text-slate-400">${item.origen}</td>
+            <td class="px-6 py-4 text-xs font-medium text-indigo-300">${rutaTexto}</td>
             <td class="px-6 py-4">
               <span class="px-2.5 py-1 rounded-full text-xs border ${badgeColor}">${item.estado}</span>
             </td>
@@ -1001,12 +1067,26 @@
       document.getElementById('kpi-tramites-count').innerText = tramitesData.length;
     }
 
-    // FILTER TABLE
+    // FILTRADO INTELIGENTE
     function filterTramites() {
-      const search = document.getElementById('search-tramites').value.toLowerCase();
+      const search = document.getElementById('search-tramites').value.toLowerCase().trim();
       const estado = document.getElementById('filter-estado').value;
+
       const filtered = tramitesData.filter(t => {
-        const matchesSearch = t.cliente.toLowerCase().includes(search) || t.id.toLowerCase().includes(search) || t.tipo.toLowerCase().includes(search);
+        const ruta = obtenerRuta(t).toLowerCase();
+        const operacion = obtenerOperacionMedio(t).toLowerCase();
+        const cliente = (t.cliente || '').toLowerCase();
+        const codigo = (t.id || '').toLowerCase();
+        const origen = (t.origenPais || '').toLowerCase();
+        const destino = (t.destinoPais || '').toLowerCase();
+
+        const matchesSearch = cliente.includes(search) || 
+                              codigo.includes(search) || 
+                              operacion.includes(search) || 
+                              ruta.includes(search) ||
+                              origen.includes(search) ||
+                              destino.includes(search);
+
         const matchesEstado = estado === 'todos' || t.estado === estado;
         return matchesSearch && matchesEstado;
       });
@@ -1025,14 +1105,17 @@
           canDelete = true;
         }
 
+        const rutaTexto = obtenerRuta(item);
+        const operacionTexto = obtenerOperacionMedio(item);
+
         tbody.innerHTML += `
           <tr class="hover:bg-slate-800/30 transition">
             <td class="px-6 py-4 font-mono font-bold text-indigo-400">${item.id}</td>
             <td class="px-6 py-4 text-xs font-medium text-slate-300">${item.fechaInicio || 'N/A'}</td>
             <td class="px-6 py-4 text-white font-medium">${item.cliente}</td>
-            <td class="px-6 py-4">${item.tipo}</td>
+            <td class="px-6 py-4 font-semibold text-slate-200">${operacionTexto}</td>
             <td class="px-6 py-4 font-semibold text-slate-200">${formatearNumero(item.pesoKg)} Kg</td>
-            <td class="px-6 py-4 text-xs text-slate-400">${item.origen}</td>
+            <td class="px-6 py-4 text-xs font-medium text-indigo-300">${rutaTexto}</td>
             <td class="px-6 py-4">
               <span class="px-2.5 py-1 rounded-full text-xs border ${badgeColor}">${item.estado}</span>
             </td>
@@ -1051,7 +1134,7 @@
       lucide.createIcons();
     }
 
-    // ADD NEW TRAMITE CON FECHA DE INICIO
+    // GUARDAR NUEVO TRÁMITE
     function guardarTramite(e) {
       e.preventDefault();
       const newId = 'LP-' + Math.floor(1000 + Math.random() * 9000);
@@ -1063,12 +1146,25 @@
         fechaVal = hoy.getFullYear() + '-' + String(hoy.getMonth() + 1).padStart(2, '0') + '-' + String(hoy.getDate()).padStart(2, '0');
       }
 
-      const tipo = document.getElementById('nuevo-tipo').value;
+      const operacion = document.getElementById('nuevo-operacion').value;
+      const medio = document.getElementById('nuevo-medio').value;
+      const origenPais = document.getElementById('nuevo-origen-pais').value;
+      const destinoPais = document.getElementById('nuevo-destino-pais').value;
       const pesoKg = parseFloat(document.getElementById('nuevo-peso').value) || 0;
-      const origen = document.getElementById('nuevo-origen').value;
       const estado = document.getElementById('nuevo-estado').value;
       
-      tramitesData.unshift({ id: newId, fechaInicio: fechaVal, cliente, tipo, pesoKg, origen, estado });
+      tramitesData.unshift({ 
+        id: newId, 
+        fechaInicio: fechaVal, 
+        cliente: cliente, 
+        operacion: operacion, 
+        medio: medio, 
+        pesoKg: pesoKg, 
+        origenPais: origenPais,
+        destinoPais: destinoPais,
+        estado: estado 
+      });
+
       renderTramitesTable();
       toggleModal('modal-nuevo-tramite');
       e.target.reset();

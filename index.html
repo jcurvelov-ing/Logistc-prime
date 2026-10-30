@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Logistic Prime - Gestión Logística Colombiana</title>
+  <title>Logistic Prime - SaaS de Gestión Logística</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Chart.js CDN -->
@@ -622,7 +622,36 @@
     </main>
   </div>
 
-  <!-- MODAL: NUEVO TRÁMITE CON SEPARACIÓN DE OPERACIÓN Y MEDIO DE TRANSPORTE -->
+  <!-- MODAL: CAMBIAR ESTADO DE TRÁMITE -->
+  <div id="modal-editar-estado" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h3 class="text-md font-bold text-white">Actualizar Estado de Trámite</h3>
+        <button onclick="toggleModal('modal-editar-estado')" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <form onsubmit="actualizarEstadoTramite(event)" class="space-y-4">
+        <input type="hidden" id="edit-tramite-id">
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Trámite ID</label>
+          <p id="edit-tramite-id-label" class="text-sm font-mono font-bold text-indigo-400 mb-3"></p>
+          <label class="block text-xs text-slate-300 font-medium mb-1">Nuevo Estado</label>
+          <select id="edit-nuevo-estado" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+            <option value="Pendiente">Pendiente</option>
+            <option value="En Revisión">En Revisión</option>
+            <option value="Aprobado">Aprobado</option>
+          </select>
+        </div>
+        <div class="pt-2 flex justify-end space-x-2">
+          <button type="button" onclick="toggleModal('modal-editar-estado')" class="px-4 py-2 bg-slate-800 text-slate-300 text-xs font-medium rounded-lg hover:bg-slate-700">Cancelar</button>
+          <button type="submit" class="px-4 py-2 bg-indigo-600 text-white text-xs font-medium rounded-lg hover:bg-indigo-500 shadow-md shadow-indigo-600/30">Actualizar Estado</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: NUEVO TRÁMITE -->
   <div id="modal-nuevo-tramite" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
     <div class="bg-slate-900 border border-slate-700 rounded-xl max-w-md w-full p-6 space-y-4 shadow-2xl">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -771,7 +800,7 @@
     // ESTADO DE SESIÓN Y USUARIO ACTUAL
     let currentUser = null;
 
-    // DATA INICIAL CON OPERACIÓN Y MEDIO DE TRANSPORTE ESTRUCTURADOS
+    // DATA INICIAL
     let tramitesData = [
       { id: 'LP-3059', fechaInicio: '2026-10-30', cliente: 'Jeronimo Martins', operacion: 'Importación', medio: 'Marítimo', pesoKg: 850, origenPais: 'Colombia', destinoPais: 'Colombia', estado: 'Pendiente' },
       { id: 'LP-8921', fechaInicio: '2026-10-15', cliente: 'AeroTech Corp', operacion: 'Importación', medio: 'Marítimo', pesoKg: 12500, origenPais: 'Colombia', destinoPais: 'Venezuela', estado: 'Aprobado' },
@@ -1020,7 +1049,31 @@
       return item.tipo || 'N/A';
     }
 
-    // RENDER TABLE
+    // EDICIÓN DE ESTADO DE TRÁMITE
+    function abrirEditarEstado(id) {
+      const item = tramitesData.find(t => t.id === id);
+      if (item) {
+        document.getElementById('edit-tramite-id').value = item.id;
+        document.getElementById('edit-tramite-id-label').innerText = item.id + ' (' + item.cliente + ')';
+        document.getElementById('edit-nuevo-estado').value = item.estado;
+        toggleModal('modal-editar-estado');
+      }
+    }
+
+    function actualizarEstadoTramite(e) {
+      e.preventDefault();
+      const id = document.getElementById('edit-tramite-id').value;
+      const nuevoEstado = document.getElementById('edit-nuevo-estado').value;
+
+      const item = tramitesData.find(t => t.id === id);
+      if (item) {
+        item.estado = nuevoEstado;
+        renderTramitesTable();
+        toggleModal('modal-editar-estado');
+      }
+    }
+
+    // RENDER TABLE CON BOTÓN DE EDICIÓN DE ESTADO HABILITADO
     function renderTramitesTable() {
       const tbody = document.getElementById('tramites-table-body');
       tbody.innerHTML = '';
@@ -1051,13 +1104,16 @@
             <td class="px-6 py-4">
               <span class="px-2.5 py-1 rounded-full text-xs border ${badgeColor}">${item.estado}</span>
             </td>
-            <td class="px-6 py-4 text-right">
+            <td class="px-6 py-4 text-right space-x-2">
+              <button onclick="abrirEditarEstado('${item.id}')" class="text-slate-400 hover:text-indigo-400 transition" title="Cambiar Estado">
+                <i data-lucide="edit-3" class="w-4 h-4 inline"></i>
+              </button>
               ${canDelete ? `
                 <button onclick="eliminarTramite('${item.id}')" class="text-slate-400 hover:text-red-400 transition" title="Eliminar Registro">
-                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                  <i data-lucide="trash-2" class="w-4 h-4 inline"></i>
                 </button>
               ` : `
-                <span class="text-[11px] text-slate-600 italic select-none" title="Los usuarios estándar no pueden eliminar trámites en revisión o aprobados">Bloqueado</span>
+                <span class="text-[11px] text-slate-600 italic select-none" title="Bloqueado por Permisos"></span>
               `}
             </td>
           </tr>
@@ -1119,13 +1175,16 @@
             <td class="px-6 py-4">
               <span class="px-2.5 py-1 rounded-full text-xs border ${badgeColor}">${item.estado}</span>
             </td>
-            <td class="px-6 py-4 text-right">
+            <td class="px-6 py-4 text-right space-x-2">
+              <button onclick="abrirEditarEstado('${item.id}')" class="text-slate-400 hover:text-indigo-400 transition" title="Cambiar Estado">
+                <i data-lucide="edit-3" class="w-4 h-4 inline"></i>
+              </button>
               ${canDelete ? `
                 <button onclick="eliminarTramite('${item.id}')" class="text-slate-400 hover:text-red-400 transition">
-                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                  <i data-lucide="trash-2" class="w-4 h-4 inline"></i>
                 </button>
               ` : `
-                <span class="text-[11px] text-slate-600 italic select-none">Bloqueado</span>
+                <span class="text-[11px] text-slate-600 italic select-none"></span>
               `}
             </td>
           </tr>

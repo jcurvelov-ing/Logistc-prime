@@ -50,15 +50,16 @@
 </head>
 <body class="h-full text-slate-100 bg-slate-900 font-sans antialiased overflow-x-hidden">
 
-  <!-- VISTA DE LOGIN CON FONDO UNIVERSIDAD DE CARTAGENA -->
-  <div id="login-view" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-cover bg-center bg-no-repeat relative" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Claustro_de_San_Agust%C3%ADn_Unicartagena.jpg/1200px-Claustro_de_San_Agust%C3%ADn_Unicartagena.jpg');">
+  <!-- VISTA DE LOGIN CON EL ESCUDO DE LA UNICARTAGENA COMO FONDO DE PANTALLA COMPLETA -->
+  <div id="login-view" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-cover bg-center bg-no-repeat relative" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/d/d6/Escudo_Unicartagena.png');">
     
-    <!-- Oscurecedor de fondo (Overlay) -->
-    <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"></div>
+    <!-- Oscurecedor de fondo (Overlay) para legibilidad -->
+    <div class="absolute inset-0 bg-slate-950/85 backdrop-blur-md"></div>
 
     <div class="max-w-md w-full bg-slate-900/90 border border-slate-700/80 backdrop-blur-md rounded-2xl p-8 shadow-2xl relative z-10 overflow-hidden">
       <div class="absolute -top-10 -right-10 w-32 h-32 bg-indigo-600/20 rounded-full blur-2xl"></div>
       
+      <!-- Se mantiene el icono del camión original -->
       <div class="text-center mb-8">
         <div class="inline-flex p-3 bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-500/30 mb-3">
           <i data-lucide="truck" class="w-8 h-8 text-white"></i>
@@ -800,14 +801,21 @@
     // ESTADO DE SESIÓN Y USUARIO ACTUAL
     let currentUser = null;
 
-    // DATA INICIAL
-    let tramitesData = [
+    // DATA BASE POR DEFECTO
+    const defaultTramites = [
       { id: 'LP-3059', fechaInicio: '2026-10-30', cliente: 'Jeronimo Martins', operacion: 'Importación', medio: 'Marítimo', pesoKg: 850, origenPais: 'Colombia', destinoPais: 'Colombia', estado: 'Pendiente' },
       { id: 'LP-8921', fechaInicio: '2026-10-15', cliente: 'AeroTech Corp', operacion: 'Importación', medio: 'Marítimo', pesoKg: 12500, origenPais: 'Colombia', destinoPais: 'Venezuela', estado: 'Aprobado' },
       { id: 'LP-8922', fechaInicio: '2026-10-22', cliente: 'Global Food Import', operacion: 'Despacho Aduanero', medio: 'Terrestre', pesoKg: 4200, origenPais: 'Colombia', destinoPais: 'Perú', estado: 'En Revisión' },
       { id: 'LP-8923', fechaInicio: '2026-10-28', cliente: 'Industrias San José', operacion: 'Exportación', medio: 'Aéreo', pesoKg: 1850, origenPais: 'Colombia', destinoPais: 'Argentina', estado: 'Pendiente' },
       { id: 'LP-8924', fechaInicio: '2026-10-29', cliente: 'TechLogistics SA', operacion: 'Tránsito Internacional', medio: 'Terrestre', pesoKg: 28000, origenPais: 'Colombia', destinoPais: 'Ecuador', estado: 'Aprobado' }
     ];
+
+    // CARGAR DESDE LOCALSTORAGE O USAR VALORES POR DEFECTO
+    let tramitesData = JSON.parse(localStorage.getItem('logistic_tramites')) || defaultTramites;
+
+    function guardarEnLocalStorage() {
+      localStorage.setItem('logistic_tramites', JSON.stringify(tramitesData));
+    }
 
     // COPIAS DE SEGURIDAD SIMULADAS
     let backupsData = [];
@@ -964,6 +972,7 @@
       if (backupEncontrado && backupEncontrado.snapshot) {
         if (confirm(`¿Estás seguro de que deseas restaurar la copia de seguridad ${bkId}? Los datos actuales serán reemplazados por los de ese punto en el tiempo.`)) {
           tramitesData = JSON.parse(backupEncontrado.snapshot);
+          guardarEnLocalStorage();
           renderTramitesTable();
           alert(`Sistema restaurado correctamente al punto de respaldo ${bkId}.`);
           switchTab('tramites');
@@ -1068,6 +1077,7 @@
       const item = tramitesData.find(t => t.id === id);
       if (item) {
         item.estado = nuevoEstado;
+        guardarEnLocalStorage();
         renderTramitesTable();
         toggleModal('modal-editar-estado');
       }
@@ -1224,6 +1234,7 @@
         estado: estado 
       });
 
+      guardarEnLocalStorage();
       renderTramitesTable();
       toggleModal('modal-nuevo-tramite');
       e.target.reset();
@@ -1233,6 +1244,7 @@
     function eliminarTramite(id) {
       if (confirm(`¿Confirma que desea eliminar el registro ${id}?`)) {
         tramitesData = tramitesData.filter(t => t.id !== id);
+        guardarEnLocalStorage();
         renderTramitesTable();
       }
     }

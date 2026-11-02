@@ -50,11 +50,10 @@
 </head>
 <body class="h-full text-slate-100 bg-slate-900 font-sans antialiased overflow-x-hidden">
 
-  <!-- VISTA DE LOGIN CORREGIDA (CUBRE 100% DE LA PANTALLA Y CON ESCUDOS MÁS NÍTIDOS Y VISIBLES) -->
+  <!-- VISTA DE LOGIN CORREGIDA -->
   <div id="login-view" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950 min-h-screen w-screen overflow-hidden" 
        style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/d/d6/Escudo_Unicartagena.png'); background-repeat: repeat; background-size: 80px 80px; image-rendering: -webkit-optimize-contrast;">
     
-    <!-- Capa de contraste suavizada al 40% para que los escudos brillen y se noten claramente -->
     <div class="absolute inset-0 bg-slate-950/40 backdrop-blur-[1px]"></div>
 
     <div class="max-w-md w-full bg-slate-900/90 border border-slate-700/80 backdrop-blur-md rounded-2xl p-8 shadow-2xl relative z-10 overflow-hidden">
@@ -120,7 +119,7 @@
             <span>Gestión de Trámites</span>
           </button>
 
-          <!-- SECCIÓN DE GESTIÓN FINANCIERA / VALOR DE TRÁMITES -->
+          <!-- GESTIÓN FINANCIERA -->
           <button onclick="switchTab('financiera')" id="nav-financiera" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-emerald-400 hover:bg-emerald-500/10 transition-all border border-emerald-500/20">
             <i data-lucide="dollar-sign" class="w-5 h-5"></i>
             <span>Gestión Financiera</span>
@@ -139,7 +138,7 @@
             <span>Reportes y KPIs</span>
           </button>
           
-          <!-- BOTÓN EXCLUSIVO ADMIN: RESPALDOS DEL SISTEMA -->
+          <!-- ADMIN: RESPALDOS DEL SISTEMA -->
           <button onclick="switchTab('backups')" id="nav-backups" class="nav-btn admin-only w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-amber-400 hover:bg-amber-500/10 transition-all border border-amber-500/20 mt-2">
             <i data-lucide="database" class="w-5 h-5"></i>
             <span>Backups del Sistema</span>
@@ -199,9 +198,11 @@
       <!-- TAB CONTENTS CONTAINER -->
       <div class="p-6 space-y-6">
         
-        <!-- SECTION: DASHBOARD -->
+        <!-- SECTION: DASHBOARD (CON 5 TARJETAS KPI ADAPTADAS) -->
         <section id="tab-dashboard" class="tab-content space-y-6">
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            
+            <!-- KPI 1: Trámites Activos -->
             <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-5 relative overflow-hidden">
               <div class="flex justify-between items-start">
                 <div>
@@ -216,6 +217,8 @@
                 <i data-lucide="trending-up" class="w-3.5 h-3.5 mr-1"></i> +12% respecto a la semana anterior
               </p>
             </div>
+
+            <!-- KPI 2: Capacidad Ocupada -->
             <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-5 relative overflow-hidden">
               <div class="flex justify-between items-start">
                 <div>
@@ -227,9 +230,11 @@
                 </div>
               </div>
               <p class="text-xs text-amber-400 flex items-center mt-3">
-                <i data-lucide="alert-circle" class="w-3.5 h-3.5 mr-1"></i> 78% de 9.600.000 m³ totales (Triple Capacidad)
+                <i data-lucide="alert-circle" class="w-3.5 h-3.5 mr-1"></i> 78% de 9.600.000 m³ totales
               </p>
             </div>
+
+            <!-- KPI 3: Despachos -->
             <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-5 relative overflow-hidden">
               <div class="flex justify-between items-start">
                 <div>
@@ -244,21 +249,40 @@
                 <i data-lucide="check-circle" class="w-3.5 h-3.5 mr-1"></i> 99.1% entregas a tiempo
               </p>
             </div>
+
+            <!-- KPI 4 (NUEVA): Ingresos Aprobados -->
+            <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-5 relative overflow-hidden">
+              <div class="flex justify-between items-start">
+                <div>
+                  <p class="text-xs text-slate-400 font-medium">Ingresos Aprobados</p>
+                  <h3 class="text-2xl font-bold text-emerald-400 mt-1" id="kpi-ingresos-aprobados">$ 0 COP</h3>
+                </div>
+                <div class="p-2 bg-emerald-500/10 rounded-lg border border-emerald-500/20 text-emerald-400">
+                  <i data-lucide="check-check" class="w-5 h-5"></i>
+                </div>
+              </div>
+              <p class="text-xs text-emerald-400 flex items-center mt-3">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5 mr-1"></i> Contratos confirmados
+              </p>
+            </div>
+
+            <!-- KPI 5: Ingresos Estimados Totales -->
             <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-5 relative overflow-hidden">
               <div class="flex justify-between items-start">
                 <div>
                   <p class="text-xs text-slate-400 font-medium">Ingresos Estimados Totales</p>
-                  <h3 class="text-2xl font-bold text-emerald-400 mt-1" id="kpi-ingresos">$ 0 COP</h3>
+                  <h3 class="text-2xl font-bold text-indigo-400 mt-1" id="kpi-ingresos">$ 0 COP</h3>
                 </div>
-                <div class="p-2 bg-emerald-500/10 rounded-lg border border-emerald-500/20 text-emerald-400">
+                <div class="p-2 bg-indigo-500/10 rounded-lg border border-indigo-500/20 text-indigo-400">
                   <i data-lucide="dollar-sign" class="w-5 h-5"></i>
                 </div>
               </div>
               <p class="text-xs text-slate-400 flex items-center mt-3">
-                <i data-lucide="clock" class="w-3.5 h-3.5 mr-1"></i> Suma real de todos los trámites
+                <i data-lucide="clock" class="w-3.5 h-3.5 mr-1"></i> Ponderado general acumulado
               </p>
             </div>
           </div>
+
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="bg-slate-800/40 border border-slate-700/60 rounded-xl p-5">
               <div class="flex justify-between items-center mb-4">
@@ -285,7 +309,7 @@
           </div>
         </section>
 
-        <!-- SECTION: TRAMITES CON COLUMNA DE VALOR INCLUIDA -->
+        <!-- SECTION: TRAMITES -->
         <section id="tab-tramites" class="tab-content space-y-6 hidden">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-800/40 p-4 border border-slate-700/60 rounded-xl">
             <div>
@@ -328,15 +352,13 @@
                     <th class="px-6 py-3 text-right">Acción</th>
                   </tr>
                 </thead>
-                <tbody id="tramites-table-body" class="divide-y divide-slate-700/40">
-                  <!-- JS Injected Rows -->
-                </tbody>
+                <tbody id="tramites-table-body" class="divide-y divide-slate-700/40"></tbody>
               </table>
             </div>
           </div>
         </section>
 
-        <!-- SECCIÓN DE GESTIÓN FINANCIERA (DESGLOSE COMPLETO DE VALORES) -->
+        <!-- SECCIÓN DE GESTIÓN FINANCIERA -->
         <section id="tab-financiera" class="tab-content space-y-6 hidden">
           <div class="bg-slate-800/40 border border-emerald-500/30 rounded-xl p-6">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
@@ -370,9 +392,7 @@
                       <th class="px-6 py-3 text-right">Edición Admin</th>
                     </tr>
                   </thead>
-                  <tbody id="financiera-table-body" class="divide-y divide-slate-800">
-                    <!-- Filas inyectadas por JS -->
-                  </tbody>
+                  <tbody id="financiera-table-body" class="divide-y divide-slate-800"></tbody>
                 </table>
               </div>
             </div>
@@ -640,7 +660,7 @@
           </div>
         </section>
 
-        <!-- SECTION EXCLUSIVA ADMIN: GESTIÓN DE BACKUPS SIMULADOS -->
+        <!-- SECTION EXCLUSIVA ADMIN: GESTIÓN DE BACKUPS -->
         <section id="tab-backups" class="tab-content space-y-6 hidden">
           <div class="bg-slate-800/40 border border-amber-500/30 rounded-xl p-6">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
@@ -673,9 +693,7 @@
                       <th class="px-6 py-3 text-right">Acción</th>
                     </tr>
                   </thead>
-                  <tbody id="backups-table-body" class="divide-y divide-slate-800">
-                    <!-- Filas inyectadas por JS -->
-                  </tbody>
+                  <tbody id="backups-table-body" class="divide-y divide-slate-800"></tbody>
                 </table>
               </div>
             </div>
@@ -686,7 +704,7 @@
     </main>
   </div>
 
-  <!-- MODAL: CAMBIAR PRECIO DEL TRÁMITE (EXCLUSIVO ADMIN) -->
+  <!-- MODAL: CAMBIAR PRECIO DEL TRÁMITE -->
   <div id="modal-editar-precio" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
     <div class="bg-slate-900 border border-slate-700 rounded-xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -740,7 +758,7 @@
     </div>
   </div>
 
-  <!-- MODAL: NUEVO TRÁMITE CON CAMPO DE VALOR -->
+  <!-- MODAL: NUEVO TRÁMITE -->
   <div id="modal-nuevo-tramite" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
     <div class="bg-slate-900 border border-slate-700 rounded-xl max-w-md w-full p-6 space-y-4 shadow-2xl">
       <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -896,7 +914,7 @@
     // ESTADO DE SESIÓN Y USUARIO ACTUAL
     let currentUser = null;
 
-    // DATA BASE POR DEFECTO CON VALORES EN PESOS ($ COP) POR TRÁMITE
+    // DATA BASE POR DEFECTO
     const defaultTramites = [
       { id: 'LP-3059', fechaInicio: '2026-10-30', cliente: 'Jeronimo Martins', operacion: 'Importación', medio: 'Marítimo', pesoKg: 850, origenPais: 'Colombia', destinoPais: 'Colombia', estado: 'Pendiente', valorCop: 4200000 },
       { id: 'LP-8921', fechaInicio: '2026-10-15', cliente: 'AeroTech Corp', operacion: 'Importación', medio: 'Marítimo', pesoKg: 12500, origenPais: 'Colombia', destinoPais: 'Venezuela', estado: 'Aprobado', valorCop: 18500000 },
@@ -905,17 +923,14 @@
       { id: 'LP-8924', fechaInicio: '2026-10-29', cliente: 'TechLogistics SA', operacion: 'Tránsito Internacional', medio: 'Terrestre', pesoKg: 28000, origenPais: 'Colombia', destinoPais: 'Ecuador', estado: 'Aprobado', valorCop: 24000000 }
     ];
 
-    // CARGAR DESDE LOCALSTORAGE O USAR VALORES POR DEFECTO
     let tramitesData = JSON.parse(localStorage.getItem('logistic_tramites')) || defaultTramites;
 
     function guardarEnLocalStorage() {
       localStorage.setItem('logistic_tramites', JSON.stringify(tramitesData));
     }
 
-    // COPIAS DE SEGURIDAD SIMULADAS
     let backupsData = [];
 
-    // INICIALIZACIÓN
     window.onload = function() {
       lucide.createIcons();
       initCharts();
@@ -923,7 +938,6 @@
       iniciarSimuladorBackups();
     };
 
-    // CONTROL DE AUTENTICACIÓN
     function handleLogin(e) {
       e.preventDefault();
       const u = document.getElementById('login-user').value.trim();
@@ -961,7 +975,6 @@
       document.getElementById('app-view').classList.add('hidden');
     }
 
-    // APLICAR PERMISOS DE ROL (RBAC)
     function applyUserPermissions() {
       document.getElementById('login-view').classList.add('hidden');
       document.getElementById('app-view').classList.remove('hidden');
@@ -985,7 +998,6 @@
       actualizarTotalesGlobales();
     }
 
-    // SIMULACIÓN DE BACKUP AUTOMÁTICO PERIÓDICO
     function iniciarSimuladorBackups() {
       setInterval(() => {
         const ahora = new Date();
@@ -1051,11 +1063,8 @@
               <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">${bk.estado}</span>
             </td>
             <td class="px-6 py-4 text-right space-x-2">
-              <button onclick="restaurarBackup('${bk.id}')" class="px-2 py-1 text-xs bg-indigo-600/30 text-indigo-300 hover:bg-indigo-600 hover:text-white rounded border border-indigo-500/30 transition" title="Restaurar este estado">
+              <button onclick="restaurarBackup('${bk.id}')" class="px-2 py-1 text-xs bg-indigo-600/30 text-indigo-300 hover:bg-indigo-600 hover:text-white rounded border border-indigo-500/30 transition">
                 Restaurar
-              </button>
-              <button onclick="descargarBackupJSON('${bk.id}')" class="p-1.5 text-amber-400 hover:bg-amber-500/10 rounded transition" title="Descargar Respaldo JSON">
-                <i data-lucide="download" class="w-4 h-4 inline"></i>
               </button>
             </td>
           </tr>
@@ -1067,23 +1076,18 @@
     function restaurarBackup(bkId) {
       const backupEncontrado = backupsData.find(b => b.id === bkId);
       if (backupEncontrado && backupEncontrado.snapshot) {
-        if (confirm(`¿Estás seguro de que deseas restaurar la copia de seguridad ${bkId}? Los datos actuales serán reemplazados por los de ese punto en el tiempo.`)) {
+        if (confirm(`¿Estás seguro de que deseas restaurar la copia ${bkId}?`)) {
           tramitesData = JSON.parse(backupEncontrado.snapshot);
           guardarEnLocalStorage();
           renderTramitesTable();
           renderFinancieraTable();
           actualizarTotalesGlobales();
-          alert(`Sistema restaurado correctamente al punto de respaldo ${bkId}.`);
+          alert(`Sistema restaurado al punto ${bkId}.`);
           switchTab('tramites');
         }
       }
     }
 
-    function descargarBackupJSON(bkId) {
-      alert('Simulación: Descargando archivo de respaldo ' + bkId + '.json');
-    }
-
-    // FORMATO MONEDA COLOMBIANA
     function formatearCOP(valor) {
       return new Intl.NumberFormat('es-CO', {
         style: 'currency',
@@ -1092,21 +1096,19 @@
       }).format(valor || 0);
     }
 
-    // FORMATO NÚMEROS CON PUNTOS
     function formatearNumero(valor) {
       return new Intl.NumberFormat('es-CO').format(valor || 0);
     }
 
-    // TAB SWITCHING SYSTEM
     function switchTab(tabId) {
       if (tabId === 'backups' && currentUser.role !== 'admin') {
-        alert('Acceso Restringido: Este módulo solo está disponible para la cuenta Administrador.');
+        alert('Acceso Restringido solo para Administrador.');
         return;
       }
 
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
       document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/20', 'bg-amber-600', 'bg-emerald-600');
+        btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg', 'bg-amber-600', 'bg-emerald-600');
         btn.classList.add('text-slate-400');
       });
 
@@ -1118,30 +1120,17 @@
         } else if (tabId === 'financiera') {
           activeNav.classList.add('bg-emerald-600', 'text-white', 'shadow-lg');
         } else {
-          activeNav.classList.add('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/20');
+          activeNav.classList.add('bg-indigo-600', 'text-white', 'shadow-lg');
         }
         activeNav.classList.remove('text-slate-400');
       }
-      
-      const titles = {
-        'dashboard': 'Dashboard Operativo - Logistic Prime',
-        'tramites': 'Gestión de Trámites Logísticos',
-        'financiera': 'Gestión Financiera - Valorización de Trámites',
-        'bodegas': 'Control de Bodegas e Inventario por País',
-        'cotizador': 'Calculadora de Envíos y Tarifas por Distancia',
-        'reportes': 'Reportes Universitarios y Analytics',
-        'backups': 'Historial de Copias de Seguridad del Sistema (Solo Admin)'
-      };
-      document.getElementById('page-title').innerText = titles[tabId];
     }
 
-    // MODAL TOGGLE
     function toggleModal(modalId) {
       const modal = document.getElementById(modalId);
       modal.classList.toggle('hidden');
     }
 
-    // OBTENER TEXTO DE RUTA
     function obtenerRuta(item) {
       if (item.origenPais && item.destinoPais) {
         if (item.origenPais.toLowerCase() === item.destinoPais.toLowerCase()) {
@@ -1152,7 +1141,6 @@
       return item.origen || 'N/A';
     }
 
-    // OBTENER OPERACIÓN Y MEDIO
     function obtenerOperacionMedio(item) {
       if (item.operacion && item.medio) {
         return `${item.operacion} (${item.medio})`;
@@ -1160,12 +1148,8 @@
       return item.tipo || 'N/A';
     }
 
-    // EDICIÓN DE PRECIO/VALOR DEL TRÁMITE (EXCLUSIVO ADMIN)
     function abrirEditarPrecio(id) {
-      if (currentUser.role !== 'admin') {
-        alert('Acceso Denegado: Únicamente el Administrador puede modificar los precios de los trámites.');
-        return;
-      }
+      if (currentUser.role !== 'admin') return alert('Acceso denegado.');
       const item = tramitesData.find(t => t.id === id);
       if (item) {
         document.getElementById('edit-precio-id').value = item.id;
@@ -1191,7 +1175,6 @@
       }
     }
 
-    // RENDER DE LA TABLA DE GESTIÓN FINANCIERA
     function renderFinancieraTable() {
       const tbody = document.getElementById('financiera-table-body');
       if (!tbody) return;
@@ -1217,12 +1200,13 @@
             <td class="px-6 py-4 text-xs font-medium text-indigo-300">${obtenerRuta(item)}</td>
             <td class="px-6 py-4 font-bold text-emerald-400 font-mono">${formatearCOP(valor)}</td>
             <td class="px-6 py-4">
-              <span class="px-2.5 py-0.5 rounded-full text-xs border ${badgeColor}">${item.estado}</span>
+              <!-- SE AGREGA whitespace-nowrap inline-block PARA EVITAR CORTE DE PALABRA -->
+              <span class="px-2.5 py-0.5 rounded-full text-xs border whitespace-nowrap inline-block ${badgeColor}">${item.estado}</span>
             </td>
             <td class="px-6 py-4 text-right">
               ${isAdmin ? `
                 <button onclick="abrirEditarPrecio('${item.id}')" class="px-3 py-1 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white rounded text-xs font-medium transition border border-emerald-500/30">
-                  <i data-lucide="edit-3" class="w-3.5 h-3.5 inline mr-1"></i> Modificar Precio
+                  Modificar Precio
                 </button>
               ` : `
                 <span class="text-[11px] text-slate-500 italic">Solo Lectura</span>
@@ -1236,14 +1220,29 @@
       lucide.createIcons();
     }
 
+    // LÓGICA DE CÁLCULO SEPARADO (APROBADOS vs TOTALES)
     function actualizarTotalesGlobales() {
-      let suma = 0;
-      tramitesData.forEach(t => suma += (t.valorCop || 0));
-      const el = document.getElementById('kpi-ingresos');
-      if (el) el.innerText = formatearCOP(suma);
+      let sumaTotal = 0;
+      let sumaAprobados = 0;
+
+      tramitesData.forEach(t => {
+        const valor = t.valorCop || 0;
+        sumaTotal += valor;
+
+        if (t.estado === 'Aprobado') {
+          sumaAprobados += valor;
+        }
+      });
+
+      // Ponderado Total
+      const elTotal = document.getElementById('kpi-ingresos');
+      if (elTotal) elTotal.innerText = formatearCOP(sumaTotal);
+
+      // Solo Aprobados
+      const elAprobados = document.getElementById('kpi-ingresos-aprobados');
+      if (elAprobados) elAprobados.innerText = formatearCOP(sumaAprobados);
     }
 
-    // EDICIÓN DE ESTADO DE TRÁMITE
     function abrirEditarEstado(id) {
       const item = tramitesData.find(t => t.id === id);
       if (item) {
@@ -1265,11 +1264,11 @@
         guardarEnLocalStorage();
         renderTramitesTable();
         renderFinancieraTable();
+        actualizarTotalesGlobales();
         toggleModal('modal-editar-estado');
       }
     }
 
-    // RENDER TABLE TRÁMITES CON VALOR $ COP
     function renderTramitesTable() {
       const tbody = document.getElementById('tramites-table-body');
       tbody.innerHTML = '';
@@ -1300,7 +1299,8 @@
             <td class="px-6 py-4 text-xs font-medium text-indigo-300">${rutaTexto}</td>
             <td class="px-6 py-4 font-bold text-emerald-400 font-mono">${formatearCOP(item.valorCop)}</td>
             <td class="px-6 py-4">
-              <span class="px-2.5 py-1 rounded-full text-xs border ${badgeColor}">${item.estado}</span>
+              <!-- SE AGREGA whitespace-nowrap inline-block -->
+              <span class="px-2.5 py-1 rounded-full text-xs border whitespace-nowrap inline-block ${badgeColor}">${item.estado}</span>
             </td>
             <td class="px-6 py-4 text-right space-x-2">
               ${isAdmin ? `
@@ -1325,7 +1325,6 @@
       actualizarTotalesGlobales();
     }
 
-    // FILTRADO INTELIGENTE
     function filterTramites() {
       const search = document.getElementById('search-tramites').value.toLowerCase().trim();
       const estado = document.getElementById('filter-estado').value;
@@ -1377,7 +1376,8 @@
             <td class="px-6 py-4 text-xs font-medium text-indigo-300">${rutaTexto}</td>
             <td class="px-6 py-4 font-bold text-emerald-400 font-mono">${formatearCOP(item.valorCop)}</td>
             <td class="px-6 py-4">
-              <span class="px-2.5 py-1 rounded-full text-xs border ${badgeColor}">${item.estado}</span>
+              <!-- SE AGREGA whitespace-nowrap inline-block -->
+              <span class="px-2.5 py-1 rounded-full text-xs border whitespace-nowrap inline-block ${badgeColor}">${item.estado}</span>
             </td>
             <td class="px-6 py-4 text-right space-x-2">
               ${isAdmin ? `
@@ -1400,7 +1400,6 @@
       lucide.createIcons();
     }
 
-    // GUARDAR NUEVO TRÁMITE CON VALOR FINANCIERO
     function guardarTramite(e) {
       e.preventDefault();
       const newId = 'LP-' + Math.floor(1000 + Math.random() * 9000);
@@ -1441,9 +1440,8 @@
       e.target.reset();
     }
 
-    // DELETE TRAMITE
     function eliminarTramite(id) {
-      if (confirm(`¿Confirma que desea eliminar el registro ${id}?`)) {
+      if (confirm(`¿Confirma eliminar el registro ${id}?`)) {
         tramitesData = tramitesData.filter(t => t.id !== id);
         guardarEnLocalStorage();
         renderTramitesTable();
@@ -1452,7 +1450,6 @@
       }
     }
 
-    // LÓGICA DE CALCULADORA DINÁMICA PUNTO A PUNTO
     function calcularCosto(e) {
       e.preventDefault();
       
@@ -1477,37 +1474,30 @@
         'canada': 'Canadá'
       };
 
-      // Matriz de zonas/distancias relativas
       const zonas = {
         'colombia': 1, 'venezuela': 1, 'ecuador': 1, 'panama': 1,
         'peru': 2, 'chile': 2, 'mexico': 2, 'usa': 3,
         'brasil': 3, 'argentina': 3, 'canada': 3
       };
 
-      const zonaOrigen = zonas[origen] || 1;
-      const zonaDestino = zonas[destino] || 1;
-      const diferenciaZona = Math.abs(zonaOrigen - zonaDestino);
+      const difZona = Math.abs((zonas[origen] || 1) - (zonas[destino] || 1));
 
       let tarifaKilo = 0;
       let tiempoEstimado = '';
 
       if (origen === destino) {
-        // Envío nacional dentro del mismo país
         const tarifasNacionales = { aereo: 18000, maritimo: 8000, terrestre: 6500 };
         tarifaKilo = tarifasNacionales[tipo] || 8000;
         tiempoEstimado = '1 - 2 días (Nacional)';
-      } else if (diferenciaZona === 0) {
-        // Países limítrofes / cercana distancia
+      } else if (difZona === 0) {
         const tarifasCercanas = { aereo: 120000, maritimo: 30000, terrestre: 18000 };
         tarifaKilo = tarifasCercanas[tipo] || 30000;
         tiempoEstimado = '2 - 4 días';
-      } else if (diferenciaZona === 1) {
-        // Distancia media
+      } else if (difZona === 1) {
         const tarifasMedias = { aereo: 155000, maritimo: 42000, terrestre: 32000 };
         tarifaKilo = tarifasMedias[tipo] || 42000;
         tiempoEstimado = '4 - 7 días';
       } else {
-        // Distancia larga
         const tarifasLargas = { aereo: 185000, maritimo: 52000, terrestre: 48000 };
         tarifaKilo = tarifasLargas[tipo] || 52000;
         tiempoEstimado = '6 - 11 días';
@@ -1519,22 +1509,17 @@
       const seguro = subtotal * seguroRate;
       const total = subtotal + seguro;
 
-      const nombreOrigen = nombresPaises[origen] || origen;
-      const nombreDestino = nombresPaises[destino] || destino;
-
       document.getElementById('calc-total').innerText = formatearCOP(total);
       document.getElementById('calc-breakdown').innerText = 
-        `Ruta: ${nombreOrigen} ➔ ${nombreDestino} | Tarifa: ${formatearCOP(tarifaKilo)}/Kg | Base: ${formatearCOP(subtotal)} | Seguro: ${formatearCOP(seguro)} | Tiempo Est.: ${tiempoEstimado}`;
+        `Ruta: ${nombresPaises[origen]} ➔ ${nombresPaises[destino]} | Tarifa: ${formatearCOP(tarifaKilo)}/Kg | Base: ${formatearCOP(subtotal)} | Seguro: ${formatearCOP(seguro)} | Tiempo Est.: ${tiempoEstimado}`;
       
       document.getElementById('calc-result').classList.remove('hidden');
     }
 
-    // MOCK DOWNLOAD REPORT
     function descargarSimulacion(nombre) {
-      alert('Simulación de descarga: Reporte de "' + nombre + '" generado para Logistic Prime.');
+      alert('Simulación de descarga: Reporte de "' + nombre + '" generado.');
     }
 
-    // CHARTS CONFIGURATION
     function initCharts() {
       const ctx1 = document.getElementById('chart-tramites').getContext('2d');
       new Chart(ctx1, {
@@ -1542,7 +1527,7 @@
         data: {
           labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
           datasets: [{
-            label: 'Trámites Completados',
+            label: 'Trámites',
             data: [65, 78, 90, 115, 105, 128],
             borderColor: '#6366f1',
             backgroundColor: 'rgba(99, 102, 241, 0.1)',

@@ -543,10 +543,22 @@
             <p class="text-xs text-slate-400 mb-6">Cotizador dinámico desde Colombia hacia 11 destinos clave en el continente americano.</p>
             <form id="calc-form" onsubmit="calcularCosto(event)" class="space-y-4">
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-xs text-slate-300 font-medium mb-1">País de Origen</label>
-                  <input type="text" value="Colombia (Fijo)" disabled class="w-full bg-slate-950/80 border border-slate-800 rounded-lg p-2.5 text-sm text-indigo-400 font-semibold cursor-not-allowed">
-                </div>
+               <div>
+  <label class="block text-xs text-slate-300 font-medium mb-1">País de Origen</label>
+  <select id="calc-origen" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+    <option value="colombia">Colombia</option>
+    <option value="venezuela">Venezuela</option>
+    <option value="ecuador">Ecuador</option>
+    <option value="panama">Panamá</option>
+    <option value="peru">Perú</option>
+    <option value="chile">Chile</option>
+    <option value="mexico">México</option>
+    <option value="usa">Estados Unidos</option>
+    <option value="brasil">Brasil</option>
+    <option value="argentina">Argentina</option>
+    <option value="canada">Canadá</option>
+  </select>
+</div>
                 <div>
                   <label class="block text-xs text-slate-300 font-medium mb-1">País de Destino</label>
                   <select id="calc-destino" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
@@ -1441,43 +1453,82 @@
       }
     }
 
-    // CALCULATOR LOGIC
-    function calcularCosto(e) {
-      e.preventDefault();
-      
-      const destino = document.getElementById('calc-destino').value;
-      const tipo = document.getElementById('calc-tipo').value;
-      const peso = parseFloat(document.getElementById('calc-peso').value);
-      const volumen = parseFloat(document.getElementById('calc-volumen').value);
-      const seguroRate = parseFloat(document.getElementById('calc-seguro').value);
-      
-      const tarifasPorPais = {
-        'venezuela': { aereo: 120000, maritimo: 30000, terrestre: 18000, nombre: 'Venezuela', dias: '2 - 4 días' },
-        'ecuador':   { aereo: 120000, maritimo: 30000, terrestre: 18000, nombre: 'Ecuador', dias: '2 - 3 días' },
-        'panama':    { aereo: 125000, maritimo: 32000, terrestre: 20000, nombre: 'Panamá', dias: '3 - 5 días' },
-        'peru':      { aereo: 135000, maritimo: 35000, terrestre: 25000, nombre: 'Perú', dias: '4 - 6 días' },
-        'chile':     { aereo: 160000, maritimo: 45000, terrestre: 35000, nombre: 'Chile', dias: '6 - 9 días' },
-        'mexico':    { aereo: 165000, maritimo: 45000, terrestre: 40000, nombre: 'México', dias: '5 - 8 días' },
-        'usa':       { aereo: 170000, maritimo: 48000, terrestre: 45000, nombre: 'Estados Unidos', dias: '4 - 7 días' },
-        'brasil':    { aereo: 175000, maritimo: 48000, terrestre: 42000, nombre: 'Brasil', dias: '6 - 10 días' },
-        'argentina': { aereo: 180000, maritimo: 50000, terrestre: 48000, nombre: 'Argentina', dias: '7 - 12 días' },
-        'canada':    { aereo: 185000, maritimo: 52000, terrestre: 50000, nombre: 'Canadá', dias: '6 - 10 días' },
-        'colombia':  { aereo: 18000,  maritimo: 8000,   terrestre: 6500,  nombre: 'Colombia (Nacional)', dias: '1 - 2 días' }
-      };
+// LÓGICA DE CALCULADORA DINÁMICA PUNTO A PUNTO
+function calcularCosto(e) {
+  e.preventDefault();
+  
+  const origen = document.getElementById('calc-origen').value;
+  const destino = document.getElementById('calc-destino').value;
+  const tipo = document.getElementById('calc-tipo').value;
+  const peso = parseFloat(document.getElementById('calc-peso').value) || 0;
+  const volumen = parseFloat(document.getElementById('calc-volumen').value) || 0;
+  const seguroRate = parseFloat(document.getElementById('calc-seguro').value) || 0;
 
-      const infoPais = tarifasPorPais[destino] || tarifasPorPais['venezuela'];
-      let tarifaKilo = infoPais[tipo] || infoPais['aereo'];
-      const costoPeso = peso * tarifaKilo;
-      const costoVolumen = volumen * 120000;
-      const subtotal = costoPeso + costoVolumen;
-      const seguro = subtotal * seguroRate;
-      const total = subtotal + seguro;
+  const nombresPaises = {
+    'colombia': 'Colombia',
+    'venezuela': 'Venezuela',
+    'ecuador': 'Ecuador',
+    'panama': 'Panamá',
+    'peru': 'Perú',
+    'chile': 'Chile',
+    'mexico': 'México',
+    'usa': 'Estados Unidos',
+    'brasil': 'Brasil',
+    'argentina': 'Argentina',
+    'canada': 'Canadá'
+  };
 
-      document.getElementById('calc-total').innerText = formatearCOP(total);
-      document.getElementById('calc-breakdown').innerText = 
-        `Ruta: Colombia ➔ ${infoPais.nombre} | Tarifa: ${formatearCOP(tarifaKilo)}/Kg | Base: ${formatearCOP(subtotal)} | Seguro: ${formatearCOP(seguro)} | Tiempo Est.: ${infoPais.dias}`;
-      
-      document.getElementById('calc-result').classList.remove('hidden');
+  // Matriz de zonas/distancias relativas
+  const zonas = {
+    'colombia': 1, 'venezuela': 1, 'ecuador': 1, 'panama': 1,
+    'peru': 2, 'chile': 2, 'mexico': 2, 'usa': 3,
+    'brasil': 3, 'argentina': 3, 'canada': 3
+  };
+
+  const zonaOrigen = zonas[origen] || 1;
+  const zonaDestino = zonas[destino] || 1;
+  const diferenciaZona = Math.abs(zonaOrigen - zonaDestino);
+
+  let tarifaKilo = 0;
+  let tiempoEstimado = '';
+
+  if (origen === destino) {
+    // Envío nacional dentro del mismo país
+    const tarifasNacionales = { aereo: 18000, maritimo: 8000, terrestre: 6500 };
+    tarifaKilo = tarifasNacionales[tipo] || 8000;
+    tiempoEstimado = '1 - 2 días (Nacional)';
+  } else if (diferenciaZona === 0) {
+    // Países limítrofes / cercana distancia
+    const tarifasCercanas = { aereo: 120000, maritimo: 30000, terrestre: 18000 };
+    tarifaKilo = tarifasCercanas[tipo] || 30000;
+    tiempoEstimado = '2 - 4 días';
+  } else if (diferenciaZona === 1) {
+    // Distancia media
+    const tarifasMedias = { aereo: 155000, maritimo: 42000, terrestre: 32000 };
+    tarifaKilo = tarifasMedias[tipo] || 42000;
+    tiempoEstimado = '4 - 7 días';
+  } else {
+    // Distancia larga
+    const tarifasLargas = { aereo: 185000, maritimo: 52000, terrestre: 48000 };
+    tarifaKilo = tarifasLargas[tipo] || 52000;
+    tiempoEstimado = '6 - 11 días';
+  }
+
+  const costoPeso = peso * tarifaKilo;
+  const costoVolumen = volumen * 120000;
+  const subtotal = costoPeso + costoVolumen;
+  const seguro = subtotal * seguroRate;
+  const total = subtotal + seguro;
+
+  const nombreOrigen = nombresPaises[origen] || origen;
+  const nombreDestino = nombresPaises[destino] || destino;
+
+  document.getElementById('calc-total').innerText = formatearCOP(total);
+  document.getElementById('calc-breakdown').innerText = 
+    `Ruta: ${nombreOrigen} ➔ ${nombreDestino} | Tarifa: ${formatearCOP(tarifaKilo)}/Kg | Base: ${formatearCOP(subtotal)} | Seguro: ${formatearCOP(seguro)} | Tiempo Est.: ${tiempoEstimado}`;
+  
+  document.getElementById('calc-result').classList.remove('hidden');
+}
     }
 
     // MOCK DOWNLOAD REPORT

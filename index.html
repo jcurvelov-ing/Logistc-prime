@@ -50,11 +50,12 @@
 </head>
 <body class="h-full text-slate-100 bg-slate-900 font-sans antialiased overflow-x-hidden">
 
-  <!-- VISTA DE LOGIN CON EL ESCUDO AJUSTADO VISIBLE Y CENTRADO -->
-  <div id="login-view" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950 bg-center bg-no-repeat relative" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/d/d6/Escudo_Unicartagena.png'); background-size: contain;">
+  <!-- VISTA DE LOGIN CON PATRÓN DE RECUADROS PEQUEÑOS (MOSAICO / TILING) -->
+  <div id="login-view" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950 relative" 
+       style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/d/d6/Escudo_Unicartagena.png'); background-repeat: repeat; background-size: 80px 80px;">
     
-    <!-- Oscurecedor liviano para que el escudo resalte claramente detrás -->
-    <div class="absolute inset-0 bg-slate-950/70 backdrop-blur-[2px]"></div>
+    <!-- Oscurecedor traslúcido para asegurar legibilidad en el centro sin tapar por completo los recuadros -->
+    <div class="absolute inset-0 bg-slate-950/75 backdrop-blur-[1px]"></div>
 
     <div class="max-w-md w-full bg-slate-900/90 border border-slate-700/80 backdrop-blur-md rounded-2xl p-8 shadow-2xl relative z-10 overflow-hidden">
       <div class="absolute -top-10 -right-10 w-32 h-32 bg-indigo-600/20 rounded-full blur-2xl"></div>
@@ -119,7 +120,7 @@
             <span>Gestión de Trámites</span>
           </button>
 
-          <!-- NUEVA SECCIÓN DE GESTIÓN FINANCIERA / VALOR DE TRÁMITES -->
+          <!-- SECCIÓN DE GESTIÓN FINANCIERA / VALOR DE TRÁMITES -->
           <button onclick="switchTab('financiera')" id="nav-financiera" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-emerald-400 hover:bg-emerald-500/10 transition-all border border-emerald-500/20">
             <i data-lucide="dollar-sign" class="w-5 h-5"></i>
             <span>Gestión Financiera</span>
@@ -335,7 +336,7 @@
           </div>
         </section>
 
-        <!-- NUEVA SECCIÓN DE GESTIÓN FINANCIERA (DESGLOSE COMPLETO DE VALORES) -->
+        <!-- SECCIÓN DE GESTIÓN FINANCIERA (DESGLOSE COMPLETO DE VALORES) -->
         <section id="tab-financiera" class="tab-content space-y-6 hidden">
           <div class="bg-slate-800/40 border border-emerald-500/30 rounded-xl p-6">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">

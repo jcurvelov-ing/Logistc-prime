@@ -50,14 +50,15 @@
 </head>
 <body class="h-full text-slate-100 bg-slate-900 font-sans antialiased overflow-x-hidden">
 
-  <!-- VISTA DE LOGIN CON PATRÓN DE RECUADROS PEQUEÑOS (MOSAICO / TILING) -->
-  <div id="login-view" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950 relative" 
-       style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/d/d6/Escudo_Unicartagena.png'); background-repeat: repeat; background-size: 80px 80px;">
+<!-- VISTA DE LOGIN CORREGIDA (CUBRE 100% DE LA PANTALLA Y CON ESCUDOS MÁS NÍTIDOS Y VISIBLES) -->
+  <div id="login-view" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950 min-h-screen w-screen overflow-hidden" 
+       style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/d/d6/Escudo_Unicartagena.png'); background-repeat: repeat; background-size: 80px 80px; image-rendering: -webkit-optimize-contrast;">
     
-    <!-- Oscurecedor traslúcido para asegurar legibilidad en el centro sin tapar por completo los recuadros -->
-    <div class="absolute inset-0 bg-slate-950/75 backdrop-blur-[1px]"></div>
+    <!-- Capa de contraste suavizada al 40% para que los escudos brillen y se noten claramente -->
+    <div class="absolute inset-0 bg-slate-950/40 backdrop-blur-[1px]"></div>
 
     <div class="max-w-md w-full bg-slate-900/90 border border-slate-700/80 backdrop-blur-md rounded-2xl p-8 shadow-2xl relative z-10 overflow-hidden">
+      <!-- (El contenido de la tarjeta de login se mantiene igual) -->
       <div class="absolute -top-10 -right-10 w-32 h-32 bg-indigo-600/20 rounded-full blur-2xl"></div>
       
       <div class="text-center mb-8">
